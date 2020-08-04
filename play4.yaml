@@ -1,0 +1,5 @@
+- hosts: vsi_sl_pak_helper_guest
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+     - install-cp4d

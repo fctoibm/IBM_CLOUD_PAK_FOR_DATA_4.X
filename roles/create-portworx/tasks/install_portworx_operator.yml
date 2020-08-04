@@ -1,0 +1,54 @@
+- name: Fact set PRIVATE_REGISTRY
+  set_fact:
+    PRIVATE_REGISTRY: "image-registry.openshift-image-registry.svc:5000/kube-system"
+    PULLPOLICY: "Always"
+    PX_CLUSTER_ID: "px-storage-cluster"
+    NAMESPACE: "kube-system"
+    DISK1: "xvdc"
+    DISK2: "xvde"
+
+
+- name: Create a directory if it does not exist
+  file:
+    path: /opt/cp4d/storage/portworx/
+    state: directory
+
+
+
+- name: Write out portworx operator file
+  template:
+    src: ../templates/portworx_operator.j2
+    dest: /opt/cp4d/storage/portworx/portworx_operator.yaml
+
+
+
+- name: apply portworx operator yaml file
+  shell: "oc apply -f  /opt/cp4d/storage/portworx/portworx_operator.yaml"
+
+# Pause for 1 minutes to build app cache.
+- name: pause for 1 minute for container to come up 
+  pause:
+    minutes: 1
+
+
+- name: list  portworx operator
+  shell: "oc get po -n kube-system | grep operator"
+  register: portworx_operator
+
+
+- debug:
+    msg:  "{{ portworx_operator }}"
+
+
+- name: Write out portworx storage cluster file
+  template:
+    src: ../templates/portworx_storagecluster.j2
+    dest: /opt/cp4d/storage/portworx/portworx_storagecluster.yaml
+
+- name: push portworx container
+  shell: "oc apply -f   /opt/cp4d/storage/portworx/portworx_storagecluster.yaml"
+
+# Pause for 1 minutes to build app cache.
+- name: pause for 5 minute for container to come up 
+  pause:
+    minutes: 5

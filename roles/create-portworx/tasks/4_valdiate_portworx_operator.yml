@@ -1,0 +1,24 @@
+- pause:
+    minutes: "10"
+
+- name: Approve any pending CSRs 
+  shell: "oc get csr -o name | xargs oc adm certificate approve"
+
+- name: list  portworx operator
+  shell: "kubectl get pods -l name=portworx -n kube-system -o jsonpath='{.items[0].metadata.name}'"
+  register: PX_POD
+
+- debug:
+    msg:  "{{ PX_POD }}"
+
+- name: list  portworx operator operational
+  shell: "oc exec {{ PX_POD.stdout }} -n kube-system -- /opt/pwx/bin/pxctl status"
+  register: PX_OPERATIONAL
+
+- debug:
+    msg:  "{{PX_OPERATIONAL }}"
+
+- name: Provision Portworx Storage cluster
+  shell:  
+    cmd: "./px-sc.sh"
+    chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/"

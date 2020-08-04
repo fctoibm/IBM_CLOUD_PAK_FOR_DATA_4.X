@@ -1,0 +1,15 @@
+global:
+  deploymentType: "Development"
+  image:
+    pullSecret: "{{np_dockercfg}}"
+  imagePullSecret: "{{np_dockercfg}}"
+core:
+  ingestion:
+    mount:
+      storageClassName: "portworx-db-gp3"
+elastic:
+  persistence:
+    storageClassName: "portworx-db-gp3"
+wire:
+  kubernetesHost: "{{sl_ocp_helpernode.0}}.{{ base_domain_prefix }}.{{ base_domain }}"
+  kubernetesIP: "{{ocp_ip}}"

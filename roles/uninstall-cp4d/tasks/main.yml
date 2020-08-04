@@ -1,0 +1,3 @@
+# tasks file for create-rehdat-container-storage
+- include:  setup_oc_login.yml
+- include:  uninstall_cp4d.yml

@@ -1,0 +1,32 @@
+###########
+# Run final install command for OCP
+############
+
+- hosts: vsi_sl_guest_storage_ocp_registry_workers
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+     - prep-registry
+
+
+- hosts: vsi_sl_guest_storage_workers
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+     - prep-portworx
+
+
+- hosts: vsi_sl_pak_helper_guest
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+     - create-openshift-registry-lv
+
+- hosts: vsi_sl_pak_helper_guest
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+     - create-portworx
+
+
+

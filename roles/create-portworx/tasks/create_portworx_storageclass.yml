@@ -1,0 +1,13 @@
+- name: Write out portworx operator file
+  template:
+    src: ../templates/portworx_storageclass.j2
+    dest: /opt/cp4d/storage/portworx_storageclass.yaml
+
+
+- name: apply portworx storage class yaml file
+  shell: "oc apply -f  /opt/cp4d/storage/portworx_storageclass.yaml"
+
+# Pause for 1 minutes to build app cache.
+- name: pause for 5 minute for container to come up 
+  pause:
+    minutes: 5

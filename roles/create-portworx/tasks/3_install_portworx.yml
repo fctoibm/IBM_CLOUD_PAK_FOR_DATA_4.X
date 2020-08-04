@@ -1,0 +1,63 @@
+- name: Install yum podman
+  yum:
+    name: podman
+    state: latest
+
+
+- name: Fact set PRIVATE_REGISTRY
+  set_fact:
+    PRIVATE_REGISTRY: "default-route-openshift-image-registry.apps.{{ base_domain_prefix }}.{{ base_domain }}" 
+    # portworx_dir_type : "ee"
+
+
+
+- name: Upload Portworx images to private Openshift registry 
+  shell:  
+    cmd: "./process-px-images.sh -r {{PRIVATE_REGISTRY}} -u $(oc whoami | sed 's/://g') -p $(oc whoami -t) -s kube-system -c podman"
+    chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-images/"
+  environment:
+    PODMAN_LOGIN_ARGS: "--tls-verify=false"
+    PODMAN_PUSH_ARGS: "--tls-verify=false"
+
+# - name: This is just to retag the image  image-registry.openshift-image-registry.svc:5000
+#   shell:  
+#     cmd: "./process-px-images.sh -r image-registry.openshift-image-registry.svc:5000 -u $(oc whoami | sed 's/://g') -p $(oc whoami -t) -s kube-system -c podman"
+#     chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-images/"
+#   environment:
+#     PODMAN_LOGIN_ARGS: "--tls-verify=false"
+#     PODMAN_PUSH_ARGS: "--tls-verify=false"
+#   ignore_errors: true
+
+
+- pause:
+    minutes: "1"
+
+- name: Update the YES to 1  
+  lineinfile:
+    path: /opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/px-install.sh
+    regexp: 'YES=0'
+    line: 'YES=1'
+    state: present
+
+# - name: Install Portworx operator
+#   shell:
+#     cmd: "./px-install.sh -reg-pull {{PRIVATE_REGISTRY}} -reg-suffix kube-system  install-operator"
+#     chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/"
+
+      
+
+- name: Install Portworx operator
+  shell:
+    cmd: "./px-install.sh install-operator"
+    chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/"
+
+      
+- pause:
+    minutes: "2"
+
+- name: Provision Portworx Storage cluster
+  shell:  
+    cmd: "./px-install.sh  -reg-pull {{PRIVATE_REGISTRY}} -reg-suffix kube-system install-storage /dev/xvdc /dev/xvde "
+    chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/"
+
+

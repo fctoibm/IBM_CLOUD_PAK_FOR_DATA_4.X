@@ -1,0 +1,32 @@
+
+
+- name: Fact set PRIVATE_REGISTRY
+  set_fact:
+    PRIVATE_REGISTRY: "default-route-openshift-image-registry.apps.{{ base_domain_prefix }}.{{ base_domain }}/kube-system" 
+
+- name: Login into podman local cluster
+  shell: "podman login -u kubeadmin -p $(oc whoami -t)  {{PRIVATE_REGISTRY}} --tls-verify=false"
+
+
+
+- name: tag portworx container
+  shell: "{{item}}"
+  with_items:
+    - podman tag gcr.io/google_containers/kube-controller-manager-amd64:v1.16.2 {{PRIVATE_REGISTRY}}/kube-controller-manager-amd64:v1.16.2
+    - podman tag gcr.io/google_containers/kube-scheduler-amd64:v1.16.2 {{PRIVATE_REGISTRY}}/kube-scheduler-amd64:v1.16.2
+    - podman tag k8s.gcr.io/pause:3.1 {{PRIVATE_REGISTRY}}/pause:3.1
+    - podman tag quay.io/openstorage/csi-attacher:v1.2.1-1 {{PRIVATE_REGISTRY}}/csi-attacher:v1.2.1-1
+    - podman tag quay.io/k8scsi/csi-node-driver-registrar:v1.1.0 {{PRIVATE_REGISTRY}}/csi-node-driver-registrar:v1.1.0
+    - podman tag quay.io/openstorage/csi-provisioner:v1.3.0-1 {{PRIVATE_REGISTRY}}/csi-provisioner:v1.3.0-1
+    - podman tag quay.io/openstorage/csi-snapshotter:v1.2.0-1 {{PRIVATE_REGISTRY}}/csi-snapshotter:v1.2.0-1
+    - podman tag quay.io/openstorage/csi-resizer:v0.2.0-1 {{PRIVATE_REGISTRY}}/csi-resizer:v0.2.0-1
+    - podman tag docker.io/openstorage/stork:2.3.3 {{PRIVATE_REGISTRY}}/stork:2.3.3
+    - podman tag docker.io/portworx/autopilot:1.0.0 {{PRIVATE_REGISTRY}}/autopilot:1.0.0
+    - podman tag docker.io/portworx/px-lighthouse:2.0.7 {{PRIVATE_REGISTRY}}/px-lighthouse:2.0.7
+    - podman tag docker.io/portworx/lh-config-sync:2.0.7 {{PRIVATE_REGISTRY}}/lh-config-sync:2.0.7
+    - podman tag docker.io/portworx/lh-stork-connector:2.0.7 {{PRIVATE_REGISTRY}}/lh-stork-connector:2.0.7
+    - podman tag docker.io/portworx/px-node-wiper:2.1.4 {{PRIVATE_REGISTRY}}/px-node-wiper:2.1.4
+    - podman tag docker.io/portworx/oci-monitor:2.5.0.1 {{PRIVATE_REGISTRY}}/oci-monitor:2.5.0.1
+    - podman tag docker.io/portworx/px-enterprise-ibm-icp4d-oem:2.5.0.1 {{PRIVATE_REGISTRY}}/px-enterprise-ibm-icp4d-oem:2.5.0.1
+    - podman tag docker.io/portworx/px-operator:1.3.0 {{PRIVATE_REGISTRY}}/px-operator:1.3.0
+    - podman tag docker.io/portworx/talisman:latest {{PRIVATE_REGISTRY}}/talisman:latest

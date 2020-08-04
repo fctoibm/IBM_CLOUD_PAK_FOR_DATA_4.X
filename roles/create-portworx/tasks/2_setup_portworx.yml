@@ -1,0 +1,58 @@
+- name: Create a directory if it does not exist
+  file:
+    path: /opt/cp4d/storage/portworx/
+    state: directory
+
+- name: Set Portworx filename variable from artifacts dir
+  set_fact: portworx_filename={{ lookup('fileglob', '{{ role_path }}/../../artifacts/*Portworx.bin')}}
+
+- name: Display paths of all .txt files in dir
+  debug: msg={{ lookup('fileglob', '{{ role_path }}/../../artifacts/*.bin')}}
+
+
+- name: Copy portworx bin install file
+  copy:
+    src: "{{portworx_filename}}"
+    dest: /opt/cp4d/storage/portworx/portworx.bin
+    mode: 0755
+
+
+- name: This command will download the portworx (3.1G file which takes about 15-20 mins depending on network bandwidth)
+  shell:
+    cmd: "yes | /opt/cp4d/storage/portworx/portworx.bin"
+    chdir: "/opt/cp4d/storage/portworx/"
+
+- name: Check directory ee exists 
+  stat:
+    path: /opt/cp4d/storage/portworx/ee
+  register: ee_dir
+
+- name: set the facts if its ee
+  set_fact: portworx_dir_type="ee"
+  when: ee_dir.stat.exists and ee_dir.stat.isdir
+
+- name: Check directory std exists 
+  stat:
+    path: /opt/cp4d/storage/portworx/std
+  register: std_dir
+
+- name: set the facts if its std
+  set_fact: portworx_dir_type="std"
+  when: std_dir.stat.exists and std_dir.stat.isdir
+
+
+- name: Find /var/log files equal or greater than 2 Gb ending with .tgz via regex
+  find:
+    paths: /opt/cp4d/storage/portworx/{{portworx_dir_type}}
+    size: 2g
+    patterns: "*.tgz"  
+  register: files_matched
+
+- name: Display paths of all .txt files in dir
+  debug: msg={{ files_matched.files[0].path | basename }}
+
+- name: Extract portworx.tgz into /opt/cp4d/storage/portworx/{{portworx_dir_type}}
+  unarchive:
+    src: "{{ files_matched.files[0].path}}"
+    dest: /opt/cp4d/storage/portworx/{{portworx_dir_type}}
+    remote_src: yes

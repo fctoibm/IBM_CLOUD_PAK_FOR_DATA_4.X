@@ -1,0 +1,24 @@
+apiVersion: core.libopenstorage.org/v1alpha1
+kind: StorageCluster
+metadata:
+  name: {{PX_CLUSTER_ID}}
+  namespace: kube-system
+  annotations:
+    portworx.io/misc-args: "--oem ibm-icp4d"
+    portworx.io/is-openshift: "true"
+spec:
+  image: {{NAMESPACE}}/oci-monitor:2.5.0.1
+  customImageRegistry: {{PRIVATE_REGISTRY}}
+  imagePullPolicy: {{PULLPOLICY}}
+  kvdb:
+    internal: true
+  storage:
+    devices:
+    - /dev/{{DISK1}} 
+    systemMetadataDevice: /dev/{{DISK2}} 
+  journalDevice: auto
+  stork:
+    enabled: true
+    image: {{PRIVATE_REGISTRY}}/stork:2.3.3
+  deleteStrategy:
+    type: UninstallAndWipe

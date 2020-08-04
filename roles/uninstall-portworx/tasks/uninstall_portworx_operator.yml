@@ -1,0 +1,43 @@
+
+
+
+- name: delete the portworx using storage clsuter yaml file
+  shell: "oc delete -f /opt/cp4d/storage/portworx/portworx_storagecluster.yaml"
+  args:
+    chdir: /opt/cp4d
+  ignore_errors: true
+
+
+- name: delete the portworx using operator yaml file
+  shell: "oc delete -f /opt/cp4d/storage/portworx/portworx_operator.yaml"
+  args:
+    chdir: /opt/cp4d
+  ignore_errors: true
+
+
+
+- name: Label the portworx Meta data nodes true 
+  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/metadata-node-"
+  with_items:
+    - "{{ sl_ocp_portworx_storage_workers }}"
+  ignore_errors: true
+
+- name: Label the portworx storage data nodes true 
+  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/enabled-"
+  with_items:
+    - "{{ sl_ocp_portworx_storage_workers }}"
+  ignore_errors: true
+
+- name: Label remove portworx storage nodes false
+  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/enabled-"
+  with_items:
+    - "{{ sl_ocp_workers }}"
+  ignore_errors: true
+
+- name: Delete pv  all
+  shell:  "kubectl delete pv --all"
+  ignore_errors: true
+
+- name: Delete SC all
+  shell:  "kubectl delete sc --all"
+  ignore_errors: true

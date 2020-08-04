@@ -1,0 +1,61 @@
+
+- name: Delete rook-ceph proejct
+  shell: "oc delete project rook-ceph"
+  ignore_errors: true
+ 
+
+- name: Delete rook-ceph
+  shell: "oc -n rook-ceph patch cephclusters.ceph.rook.io rook-ceph -p '{\"metadata\":{\"finalizers\": []}}' --type=merge"
+  ignore_errors: true
+
+- name: Label the portworx Meta data nodes true 
+  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/metadata-node=true"
+  with_items:
+    - "{{ sl_ocp_portworx_storage_workers }}"
+  ignore_errors: true
+
+- name: Label the portworx storage data nodes true 
+  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/enabled=true"
+  with_items:
+    - "{{ sl_ocp_portworx_storage_workers }}"
+  ignore_errors: true
+
+# - name: Label the portworx worker nodes true
+#   shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/enabled=true"
+#   with_items:
+#     - "{{ sl_ocp_workers }}"
+#   ignore_errors: true
+
+- name: Label the portworx worker nodes true
+  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/storageless=true"
+  with_items:
+    - "{{ sl_ocp_workers }}"
+  ignore_errors: true
+
+
+- name: change project to openshift-image-registry
+  shell:  "oc project openshift-image-registry"
+
+# - name: Patch the openshift-image-registry to Managed state
+#   shell:  "oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{\"spec\":{\"managementState\": \"Managed\"}}'"
+
+
+# - name: Patch the openshift-image-registry to empty directory
+#   shell:  "oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{\"spec\":{\"storage\":{\"pvc\":{claim: ocs4registry}}}}'"
+
+
+# - name: Patch the openshift-image-registry default route to true
+#   shell:  "oc patch configs.imageregistry.operator.openshift.io/cluster --type merge -p '{\"spec\":{\"defaultRoute\":true}}' -n openshift-image-registry"
+
+
+
+- name: get route for openshift-image-registry to validate
+  shell:  "oc get route"
+  register: oc_route
+
+
+- debug:
+    msg:  "{{ oc_route }}"
+
+
+

@@ -1,0 +1,18 @@
+---
+# tasks file for create-rehdat-container-storage
+- include:  0_setup_oc_login.yml
+- include:  1_setup_ocp_image-registry.yml
+
+
+
+
+# - include:  update_openshift_registry.yml
+# # - include:  pull_portworx_containers.yml
+# # - include:  tag_portworx_containers.yml
+# # - include:  push_portworx_containers.yml
+# - include:  install_portworx_operator.yml
+# - include:  valdiate_portworx_operator.yml
+# - include:  create_portworx_storageclass.yml
+
+
+

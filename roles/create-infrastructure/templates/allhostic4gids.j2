@@ -1,0 +1,32 @@
+
+storageocpregistryworkerhostids:
+{% for item in allstorageocregistryworkernodehostsids|dict2items %}
+# hostname: {{ item.key }}
+  - {{item.value}}     
+{% endfor %}
+
+
+storageworkerhostids:
+{% for item in allstorageworkernodehostsids|dict2items %}
+# hostname: {{ item.key }}
+  - {{item.value}}     
+{% endfor %}
+
+
+datapakworkerhostids:
+{% for item in allworkernodehostsids|dict2items %}
+# hostname: {{ item.key }}
+  - {{item.value}}     
+{% endfor %}
+
+pakhelperhostids:
+{% for item in allpakhelpernodehostids|dict2items %}
+# hostname: {{ item.key }}
+  - {{item.value}}     
+{% endfor %}
+
+helperhostids:
+{% for item in allhelpernodehostids|dict2items %}
+# hostname: {{ item.key }}
+  - {{item.value}}     
+{% endfor %}

@@ -1,0 +1,45 @@
+---
+# tasks file for uninstall-cp4d
+
+- name:  delete file in a remote server
+  file:
+   path: /opt/cp4d/pak/bin/.cpd.lock
+   state: absent
+
+- name: Uninstal cp4D assembly {{ASSEMBLY_TYPE}} from namespace {{CP4D_NAMESPACE}}
+  shell: "./cpd-linux uninstall --namespace {{CP4D_NAMESPACE}} --assembly {{ASSEMBLY_TYPE}}"
+  args:
+    chdir: /opt/cp4d/pak/bin
+  ignore_errors: true
+
+- name: Delete the namespace {{CP4D_NAMESPACE}}
+  shell: "oc delete scc cpd-user-scc -n {{CP4D_NAMESPACE}}"
+  args:
+    chdir: /opt/cp4d
+  ignore_errors: true
+
+- name: Delete the namespace {{CP4D_NAMESPACE}}
+  shell: "oc delete scc cpd-zensys-scc -n {{CP4D_NAMESPACE}}"
+  args:
+    chdir: /opt/cp4d
+  ignore_errors: true
+
+- name: Delete the namespace {{CP4D_NAMESPACE}}
+  shell: "oc delete crd cpdinstalls.cpd.ibm.com -n {{CP4D_NAMESPACE}}"
+  args:
+    chdir: /opt/cp4d
+  ignore_errors: true
+- name: Verify that the {{ASSEMBLY_TYPE}} assembly is no longer listed in namespace {{CP4D_NAMESPACE}}
+  shell: "oc get CPDInstall cr-cpdinstall -n {{CP4D_NAMESPACE}} -o yaml"
+  args:
+    chdir: /opt/cp4d
+  ignore_errors: true
+
+
+
+- name: Delete the namespace {{CP4D_NAMESPACE}}
+  shell: "oc delete project {{CP4D_NAMESPACE}}"
+  args:
+    chdir: /opt/cp4d
+  ignore_errors: true
+

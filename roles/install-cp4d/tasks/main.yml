@@ -1,0 +1,13 @@
+# tasks file for create-rehdat-container-storage
+- include:  0_setup_oc_login.yml
+- include:  lite_install_cp4d.yml
+  when: '"lite" in ASSEMBLY_TYPE' 
+- include:  watson-ks_install_cp4d.yml
+  when: '"watson-ks" in ASSEMBLY_TYPE' 
+- include:  watson-discovery_install_cp4d.yml
+  when: '"watson-discovery" in ASSEMBLY_TYPE' 
+- include:  runtime-addon-r36_install_cp4d.yml
+  when: '"runtime-addon-r36" in ASSEMBLY_TYPE'
+- include:  spark_install_cp4d.yml
+  when: '"spark" in ASSEMBLY_TYPE'
+

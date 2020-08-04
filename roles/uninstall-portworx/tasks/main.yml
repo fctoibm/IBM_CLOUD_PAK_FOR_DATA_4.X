@@ -1,0 +1,4 @@
+---
+# tasks file for uninstall-portworx
+- include:  setup_oc_login.yml
+- include:  uninstall_portworx_operator.yml

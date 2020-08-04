@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ocs4registry
+  namespace: openshift-image-registry
+spec:
+  accessModes:
+  - ReadWriteMany
+  volumeMode: Filesystem 
+  resources:
+    requests:
+      storage: 500Gi 
+  storageClassName: local-sc
+  volumeName: ocp4registery-pv-volume

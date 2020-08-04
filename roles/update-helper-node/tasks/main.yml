@@ -1,0 +1,17 @@
+
+- name: Change the timeout client setting haproxy.cfg
+  shell: "sed -i -e '/timeout client/s/ [0-9].*/ 5m/' /etc/haproxy/haproxy.cfg"
+  notify:
+    - restart haproxy
+
+
+- name: Change the timeout server setting - haproxy.cfg
+  shell: "sed -i -e '/timeout server/s/ [0-9].*/ 5m/' /etc/haproxy/haproxy.cfg"
+  notify:
+    - restart haproxy
+
+- name: Store file into /opt/ocp4/ocp4_rsa
+  fetch:
+    src: /opt/ocp4/ocp4_rsa
+    dest: "{{ role_path }}/../../artifacts/"
+    flat: yes

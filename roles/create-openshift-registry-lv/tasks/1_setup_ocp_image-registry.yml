@@ -1,0 +1,88 @@
+---
+# tasks file for openshit-registry-local-volume
+
+- name: Create a for ocp-image-registry directory if it does not exist
+  file:
+    path: /opt/cp4d/storage/ocp4-registry/
+    state: directory
+
+
+- name: apply ocp-image-registry operator yaml file
+  shell: "oc new-project local-storage "
+  ignore_errors: yes
+
+
+- name: Write ocp-image-registry operator file
+  template:
+    src: ../templates/0_local-storage-operator.yaml.j2
+    dest: /opt/cp4d/storage/ocp4-registry/0_local-storage-operator.yaml
+
+- name: apply ocp-image-registry operator yaml file
+  shell: "oc create -f /opt/cp4d/storage/ocp4-registry/0_local-storage-operator.yaml"
+
+- name: Write 1_ocp-image-registry operator file
+  template:
+    src: ../templates/1_local-storage-operator.yaml.j2
+    dest: /opt/cp4d/storage/ocp4-registry/1_local-storage-operator.yaml
+
+- name: apply ocp-image-registry operator yaml file
+  shell: "oc create -f /opt/cp4d/storage/ocp4-registry/1_local-storage-operator.yaml"
+
+- pause:
+    seconds: 30 
+
+- name: Write out ocp-image-registry file-type support for operator yaml
+  template:
+    src: ../templates/2_filetype-local-volume.yaml.j2
+    dest: /opt/cp4d/storage/ocp4-registry/2_filetype-local-volume.yaml
+
+- name: apply ocp-image-registry file-type operator yaml file
+  shell: "oc apply -f /opt/cp4d/storage/ocp4-registry/2_filetype-local-volume.yaml"
+
+
+
+- name: Write out  ocp-image-registry persistent Volumes for operator yaml
+  template:
+    src: ../templates/3_pv-storage.yaml.j2
+    dest: /opt/cp4d/storage/ocp4-registry/3_pv-storage.yaml
+
+- name: apply  ocp-image-registry volume-claim operator yaml file
+  shell: "oc apply -f /opt/cp4d/storage/ocp4-registry/3_pv-storage.yaml"
+
+
+
+- name: Write out ocp-image-registry pvc-local-storage  for operator yaml
+  template:
+    src: ../templates/4_pvc-local-storage.yaml.j2
+    dest: /opt/cp4d/storage/ocp4-registry/4_pvc-local-storage.yaml
+
+- name: apply  ocp-image-registry pvc-local-storage operator yaml file
+  shell: "oc apply -f /opt/cp4d/storage/ocp4-registry/4_pvc-local-storage.yaml"
+
+- pause:
+    seconds: 30 
+
+- name: change project to openshift-image-registry
+  shell:  "oc project openshift-image-registry"
+
+#oc patch configs.imageregistry.operator.openshift.io/cluster --type='json' --patch='[{"op": "replace", "path": "/spec/storage", "value": {"pvc":{"claim": "testwxy" }}}]'
+- name: patch  ocp-image-registry pvc-local-storage operator yaml file
+  shell: "oc patch configs.imageregistry.operator.openshift.io/cluster --type='json' --patch='[{\"op\": \"replace\", \"path\": \"/spec/managementState\", \"value\": \"Managed\"},{\"op\": \"replace\", \"path\": \"/spec/rolloutStrategy\", \"value\": \"Recreate\"},{\"op\": \"replace\", \"path\": \"/spec/replicas\", \"value\": 1},{\"op\": \"replace\", \"path\": \"/spec/storage\", \"value\": {\"pvc\":{\"claim\": \"ocs4registry\" }}}]'"
+
+
+# - name: Patch the openshift-image-registry to Managed state
+#   shell:  "oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{\"spec\":{\"managementState\": \"Managed\"}}'"
+
+
+- name: Patch the openshift-image-registry default route to true
+  shell:  "oc patch configs.imageregistry.operator.openshift.io/cluster --type merge -p '{\"spec\":{\"defaultRoute\":true}}' -n openshift-image-registry"
+
+
+
+- name: get route for openshift-image-registry to validate
+  shell:  "oc get route"
+  register: oc_route
+
+
+- debug:
+    msg:  "{{ oc_route }}"

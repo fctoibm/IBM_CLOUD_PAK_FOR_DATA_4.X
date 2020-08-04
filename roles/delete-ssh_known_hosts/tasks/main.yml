@@ -1,0 +1,23 @@
+---
+# tasks file for delete-ssh_known_hosts
+
+
+- name: remove known ssh keys from localhost
+  shell: "ssh-keygen -R {{item}}"   
+  with_items:
+    - "{{ groups['vsi_sl_pak_helper_guest'] }}"
+
+- name: remove known ssh keys from localhost
+  shell: "ssh-keygen -R {{item}}"   
+  with_items:
+    - "{{ groups['vsi_sl_guest_storage_workers'] }}"
+
+- name: remove known ssh keys from localhost
+  shell: "ssh-keygen -R {{item}}"   
+  with_items:
+    - "{{ groups['vsi_sl_guest_workers'] }}"
+
+- name: remove known ssh keys from localhost
+  shell: "ssh-keygen -R {{item}}"   
+  with_items:
+    - "{{ groups['vsi_sl_helper_guest'] }}"

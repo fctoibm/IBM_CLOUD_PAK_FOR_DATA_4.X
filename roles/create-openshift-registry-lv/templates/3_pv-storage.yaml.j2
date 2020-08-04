@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ocp4registery-pv-volume
+  labels:
+    storage.openshift.com/local-volume-owner-name: local-disks
+    storage.openshift.com/local-volume-owner-namespace: local-storage
+spec:
+  storageClassName: local-sc
+  volumeMode: Filesystem
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{sl_ocp_registry_storage_worker.0}}.{{ base_domain_prefix }}.{{ base_domain }}
+  capacity:
+    storage: 500Gi
+  accessModes:
+    - ReadWriteMany
+  local:
+    path: /mnt/local-storage/local-sc/xvdc
+    fsType: ext4
+

@@ -1,0 +1,13 @@
+- name: list  portworx operator
+  shell: " kubectl get pods -l name=portworx -n kube-system -o jsonpath='{.items[0].metadata.name}'"
+  register: PX_POD
+
+- debug:
+    msg:  "{{ PX_POD }}"
+
+- name: list  portworx operator operational
+  shell: "oc exec {{ PX_POD.stdout }} -n kube-system -- /opt/pwx/bin/pxctl status"
+  register: PX_OPERATIONAL
+
+- debug:
+    msg:  "{{PX_OPERATIONAL }}"

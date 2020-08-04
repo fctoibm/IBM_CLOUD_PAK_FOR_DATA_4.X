@@ -1,0 +1,11 @@
+---
+# handlers file for install-cp4d
+
+
+
+
+
+
+- name: cleanup openshift login
+  file: path="{{ kubeconfig | dirname }}" state=absent
+

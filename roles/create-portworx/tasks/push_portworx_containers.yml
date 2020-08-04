@@ -1,0 +1,26 @@
+
+- name: Fact set PRIVATE_REGISTRY
+  set_fact:
+    PRIVATE_REGISTRY: "default-route-openshift-image-registry.apps.{{ base_domain_prefix }}.{{ base_domain }}/kube-system" 
+
+- name: push portworx container
+  shell: "{{item}}"
+  with_items:
+    - podman push {{PRIVATE_REGISTRY}}/kube-controller-manager-amd64:v1.16.2 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/kube-scheduler-amd64:v1.16.2 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/pause:3.1 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/csi-attacher:v1.2.1-1 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/csi-node-driver-registrar:v1.1.0 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/csi-provisioner:v1.3.0-1 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/csi-snapshotter:v1.2.0-1 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/csi-resizer:v0.2.0-1 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/stork:2.3.3 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/autopilot:1.0.0 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/px-lighthouse:2.0.7 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/lh-config-sync:2.0.7 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/lh-stork-connector:2.0.7 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/px-node-wiper:2.1.4 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/oci-monitor:2.5.0.1 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/px-enterprise-ibm-icp4d-oem:2.5.0.1 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/px-operator:1.3.0 --tls-verify=false
+    - podman push {{PRIVATE_REGISTRY}}/talisman:latest --tls-verify=false

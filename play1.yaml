@@ -1,0 +1,21 @@
+###########
+# Run final install command for OCP
+############
+
+
+- hosts: local_host
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+     - delete-ssh_known_hosts
+
+
+- hosts: vsi_sl_helper_guest
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  vars:
+    host_key_checking: false
+  roles:
+     - update-helper-node
+
+

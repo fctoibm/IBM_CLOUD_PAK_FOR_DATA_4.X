@@ -1,0 +1,91 @@
+---
+# tasks file for update-pakhelper-nodes
+
+
+    - name: Install yum utils
+      yum:
+        name: yum-utils
+        state: latest
+
+    - name: Install device-mapper-persistent-data
+      yum:
+        name: device-mapper-persistent-data
+        state: latest
+
+    - name: Install lvm2
+      yum:
+        name: lvm2
+        state: latest
+
+    - name: copy pip install file
+      copy:
+        src: "{{ role_path }}/files/get-pip.py"
+        dest: /tmp/get-pip.py
+
+        
+    - name: Check to see if pip is already installed.
+      command: "{{ pip }} --version"
+      ignore_errors: true
+      changed_when: false # read-only task
+      check_mode: no
+      register: pip_is_installed
+
+
+
+    - name: Install pip.
+      command: " python  {{ pip_download_dest }}/get-pip.py "
+      become: yes
+      when: pip_is_installed.rc != 0
+
+    - name: Installing NumPy python library using Ansible pip module
+      pip:
+        name: docker-py
+
+    - name: Installing requests-oauthlib python library using Ansible pip module
+      pip:
+        name: requests-oauthlib
+  
+    
+    - name: Add Docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        validate_certs: no
+      become: yes
+
+    - name: Install Docker
+      package:
+        name: docker-ce
+        state: latest
+      become: yes
+
+    - name: start docker service
+      systemd:
+        state: started
+        name: docker
+        enabled: yes
+      
+    - name: Ansible create file if it doesn't exist example
+      file:
+        path: "/etc/sysconfig/docker"
+        state: touch
+
+    - name: Add default ulimit to docker config
+      lineinfile:
+        path: /etc/sysconfig/docker
+        regexp: '^ --default-ulimit nofile=66560'
+        line: " OPTIONS=' --default-ulimit nofile=66560' "
+        state: present
+      notify:
+          - restart docker
+
+    - name: Add default pid limit to docker config
+      lineinfile:
+        path: /etc/sysconfig/docker
+        regexp: '^ --default-pids-limit=12288'
+        line: " OPTIONS=' --default-pids-limit=12288' "
+        state: present
+      notify:
+          - restart docker
+
+

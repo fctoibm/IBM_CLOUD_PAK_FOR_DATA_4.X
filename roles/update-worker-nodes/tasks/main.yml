@@ -1,0 +1,71 @@
+---
+# tasks file for update-worker-nodes
+
+
+  - name: Copy a crio.conf file on the remote machine for backup
+    copy:
+      src: /etc/crio/crio.conf
+      dest: /etc/crio/crio.conf.bak
+      remote_src: yes
+      force: no
+    
+  - name: Add the default_ulimitsto the /etc/crio/crio.conf file   
+    become: yes 
+    lineinfile:
+      path: /etc/crio/crio.conf
+      insertafter: '^\[crio.runtime\]'
+      line: "default_ulimits = [\"nofile=66560:66560\"]"
+      firstmatch: yes
+      state: present
+      backup: yes
+    notify:
+      - restart cri-o
+
+
+  # - name: Add the default_ulimitsto the /etc/crio/crio.conf file   
+  #   become: yes 
+  #   lineinfile:
+  #     path: /etc/crio/crio.conf
+  #     insertbefore: '# default_runtime is the _name_ of the OCI runtime to be used as the default.'
+  #     line: " default_ulimits = [\"nofile=66560:66560\"] "
+  #     state: present
+  #   notify:
+  #     - restart cri-o
+
+
+
+  # - name: Aadd pids_limit to the /etc/crio/crio.conf file
+  #   shell: "sed -i -e '/pids_limit =/s/ [0-9].*/ 12288/' /etc/crio/crio.conf"
+  #   notify:
+  #     - restart cri-o
+
+  - name:  add pids_limit to the /etc/crio/crio.conf file
+    become: yes 
+    lineinfile:
+      path: /etc/crio/crio.conf
+      regexp: '^pids_limit = [0-9].*'
+      line: "pids_limit = 12288"
+      state: present
+    notify:
+      - restart cri-o
+
+  - name: upload sysctl.d  file
+    template:
+      src: ../files/42-cp4d.conf
+      dest: /etc/sysctl.d/42-cp4d.conf
+  
+  - name: execute sysctl for new file 
+    shell: "sysctl -p /etc/sysctl.d/42-cp4d.conf"
+
+
+  - name:  add pids_limit to the /etc/sysctl.conf file
+    become: yes 
+    lineinfile:
+      path: /etc/sysctl.conf
+      regexp: '^xen.independent_wallclock = 1*'
+      line: "xen.independent_wallclock = 1"
+      state: present
+
+
+
+
