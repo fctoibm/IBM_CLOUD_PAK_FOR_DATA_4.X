@@ -2,5 +2,6 @@
 # tasks file for create-infrastructure
 
 - include:  setupsl.yml
-- include:  orderslvms.yml
+- include:  download_iso.yml
+- include:  create_helper.yml
 - include: updatelocalhostfile.yml
