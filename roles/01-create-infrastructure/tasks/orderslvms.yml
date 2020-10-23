@@ -1,10 +1,4 @@
-- name: get the sl ssh keyid
-  register: contentof_sl_sshkeys
-  shell: "slcli sshkey list | grep ocp-key | awk '{print $1;}'"
 
-- name: Fact sl ssh key 
-  set_fact:
-    sl_ssh_key: "{{ contentof_sl_sshkeys.stdout_lines | list }}"
  
   
 
