@@ -1,0 +1,6 @@
+---
+# tasks file for create-infrastructure
+
+- include:  setupsl.yml
+- include:  orderslvms.yml
+- include: updatelocalhostfile.yml

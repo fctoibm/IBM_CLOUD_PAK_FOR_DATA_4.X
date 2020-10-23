@@ -1,0 +1,5 @@
+[softlayer]
+username = 291493_harsingh@us.ibm.com
+api_key = 5e0bf30bb9429346874d66663a614542274199290a1627b53ec6186175e27ed3
+endpoint_url = https://api.service.softlayer.com/rest/v3.1
+timeout = 40
