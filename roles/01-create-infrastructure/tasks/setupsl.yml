@@ -47,43 +47,11 @@
         - softlayer
       state: forcereinstall
         
-  - name: Check to see if slcli is already installed.
-    command: " slcli --version"
-    ignore_errors: false
-    changed_when: false # read-only task
-    check_mode: no
-    register: slcli_is_installed
+ 
 
-  - name: Check to see if rsa key pair exist.
-    stat: 
-      path: "{{role_path}}/../../artifacts/sl_ssh_rsa"
-    register: ssl_rsa_file
-
-  - name: fail if file does not exist
-    fail: msg="The rsa file were not copied into artifacts directory, please copy the file and run the playbook again"
-    when: ssl_rsa_file.stat.exists == false
-
-  - name: Check to see if rsa key pair exist.
-    stat: 
-      path: "{{role_path}}/../../artifacts/sl_ssh_rsa.pub"
-    register: ssl_rsa_file
-
-  - name: fail if file does not exist
-    fail: msg="The rsa pub file were not copied into artifacts directory, please copy the file and run the playbook again"
-    when: ssl_rsa_file.stat.exists == false
-
-  - name: Change file ownership, group and permissions
-    file:
-      path: "{{role_path}}/../../artifacts/sl_ssh_rsa"
-      mode: '0600'
-  - name: Write out  softlayer config file 
-    template:
-      src: "{{ role_path }}/templates/.softlayer.j2"
-      dest: "{{ role_path }}/files/.softlayer"
 
   
-  - name: Set Facts for softlayer configuration path
-    set_fact: softlayer_conf="{{ role_path }}/files/.softlayer"
+
 
   - name: If follow=yes, create a link to softlayer config file
     copy:
