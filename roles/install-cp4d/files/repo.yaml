@@ -1,0 +1,157 @@
+registry:
+    # lite    
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: base-registry
+    # WSL
+  - name: base
+    url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    # WKC
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: wkc-registry
+    # WML
+  - name: wml-base
+    url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    # DO
+  - name: do-registry
+    url: us.icr.io/release3_0_0_0_gmc3
+    username:  iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm 
+    namespace: ""
+    # DB
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: databases-registry
+    # DV
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: dv-registry 
+    # DB2z
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: db2z-registry  
+   # CDE
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: cde
+   # IIRA 
+  - name: iira-base
+    url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+   # Openscale
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: openscale-registry
+   # Streams
+  - url: us.icr.io/release3_0_0_0_gmc3
+    name: streams-registry
+    namespace: ""
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+   # CA
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: ca-registry
+   # Streams-flows
+  - url: us.icr.io/release3_0_0_0_gmc3
+    name: streams-flows
+    namespace: "" 
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+  # OSG
+  - url: us.icr.io/release3_0_0_0_gmc3 
+    name: osg
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+  # DB2WH
+  - url: us.icr.io/release3_0_0_0_gmc3
+    name: db2wh
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+  # DB2OLTP
+  - url: us.icr.io/release3_0_0_0_gmc3
+    name: db2oltp
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+   # SPSS
+  - url: us.icr.io/release3_0_0_0_gmc3
+    name: spss-modeler
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+   # SPARK
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    name: spark
+   # MDC
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    name: mdc-registry
+   # WKC INSTASCAN
+  - name: instascan-registry
+    url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+   # FCAI
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    name: fcai-registry
+   # FCI
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    name: fci-registry
+   # FCII
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    name: fcii-registry
+   # FCDD
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    name: fcdd-registry
+   # FCCS
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    name: fccs-registry
+   # BIGSQL
+  - url: us.icr.io/release3_0_0_0_gmc3
+    username: iamapikey
+    apikey: 7x2HPSlNSOtiYzDjT9aLZLrKngVAv_oTbgyPhk2yXAUm
+    namespace: ""
+    name: bigsql-registry
+fileservers:
+  - url: https://ibm-open-platform.ibm.com/repos/3.0-la/cpd/3.0.0/
+
