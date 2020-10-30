@@ -49,7 +49,7 @@ ENTITLED_REGISTRY_USER: "ekey"
 # Follow the instruction ( https://myibm.ibm.com/products-services/containerlibrary  )to download token
 ENTITLED_REGISTRY_KEY: ""
 CP4D_NAMESPACE: "zen"
-# supported assembly type [ wks-registry, lite, spark, watson-discovery runtime-addon-r36]
+# supported assembly type [ lite, watson-ks, watson-discovery, spark, runtime-addon-r36cd ]
 ASSEMBLY_TYPE: 
   - "lite"
 STORAGE_CLASS: "portworx-shared-gp3"
