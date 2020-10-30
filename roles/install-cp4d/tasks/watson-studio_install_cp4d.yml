@@ -11,7 +11,7 @@
   set_fact:
     PRIVATE_REGISTRY: "default-route-openshift-image-registry.apps.{{ base_domain_prefix }}.{{ base_domain }}"
     INTERNAL_OCP_REGISTRY: "image-registry.openshift-image-registry.svc:5000"
-    THIS_ASSEMBLY_TYPE: 'watson-ks'
+    THIS_ASSEMBLY_TYPE: 'wsl'
 
 
 - name: Create a directory if it does not exist
