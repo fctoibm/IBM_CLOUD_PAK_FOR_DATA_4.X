@@ -77,10 +77,10 @@
 
 
 
-# - name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}} file"
-#   template:
-#     src: ../templates/{{THIS_ASSEMBLY_TYPE}}.j2
-#     dest: /opt/cp4d/pak/bin/{{THIS_ASSEMBLY_TYPE}}.yaml
+- name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}} file"
+  template:
+    src: ../templates/watson-studio.j2
+    dest: /opt/cp4d/pak/bin/watson-studio.yaml
 
 - name: Approve any pending CSRs 
   shell: "oc get csr -o name | xargs oc adm certificate approve"
