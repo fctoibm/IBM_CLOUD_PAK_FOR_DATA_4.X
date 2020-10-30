@@ -55,18 +55,18 @@
     state: present
 
 ############################################
-- name: Line test2
-  blockinfile:
-     path: /opt/cp4d/pak/repo.yaml
-     insertbefore: 'fileservers'
-     state: present
-     block: |
-      #wks-regitry
-        - url: cp.icr.io
-          username: cp
-          apikey: {{ENTITLED_REGISTRY_KEY}}
-          namespace: "cp/knowledge-studio"
-          name: wks-registry
+# - name: Line test2
+#   blockinfile:
+#      path: /opt/cp4d/pak/repo.yaml
+#      insertbefore: 'fileservers'
+#      state: present
+#      block: |
+#       #wks-regitry
+#         - url: cp.icr.io
+#           username: cp
+#           apikey: {{ENTITLED_REGISTRY_KEY}}
+#           namespace: "cp/knowledge-studio"
+#           name: wks-registry
 
 
 
