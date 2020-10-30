@@ -114,8 +114,8 @@
 
 
 
-- name: "Run the cpd install dry run command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 30 mins"
-  shell: "./cpd-linux  --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify --dry-run"
+- name: "Run the cpd install dry run command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 120 mins"
+  shell: "./cpd-linux  --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify --dry-run"
   args:
     chdir: /opt/cp4d/pak/bin
 
@@ -123,8 +123,8 @@
   shell: "oc get csr -o name | xargs oc adm certificate approve"
   ignore_errors: True
 
-- name: "Run the cpd install command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 30 mins"
-  shell: "./cpd-linux  --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify"
+- name: "Run the cpd install command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 180 mins"
+  shell: "./cpd-linux  --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify"
   args:
     chdir: /opt/cp4d/pak/bin
 
