@@ -1,0 +1,109 @@
+
+       
+
+  
+  #####
+#Shutdown 
+#################################################### 
+- name: Start the portworx storage data nodes true 
+  shell:  "govc vm.power -on=true  {{item}} "
+  environment:
+   GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   GOVC_INSECURE: 1
+  with_items:
+    - "{{ sl_ocp_portworx_storage_workers }}"
+  ignore_errors: true
+  
+- name: start portworx storage data nodes true 
+  shell:  "govc vm.power -on=true {{item}}"
+  environment:
+   GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   GOVC_INSECURE: 1
+  with_items:
+    - "{{ sl_ocp_workers }}"
+  ignore_errors: true
+  
+- name: start compute storage data nodes true 
+  shell:  "govc vm.power -on=true {{item}}"
+  environment:
+   GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   GOVC_INSECURE: 1
+  with_items:
+    - "{{ sl_ocp_registry_storage_worker }}"
+  ignore_errors: true
+  
+- name: start control-plane nodes true 
+  shell:  "govc vm.power -on=true  {{sl_ocp_master_node_name_prefix}}{{item}}"
+  environment:
+   GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   GOVC_INSECURE: 1
+  with_items:
+    - "0"
+    - "1"
+    - "2"
+  ignore_errors: true
+    
+ ####
+ 
+ 
+ - name: Create  portworx storage data nodes true 
+  shell:  "govc snapshot.create -vm {{item}} '{{ snapshot_name }}'"
+  environment:
+   GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   GOVC_INSECURE: 1
+  with_items:
+    - "{{ sl_ocp_portworx_storage_workers }}"
+  ignore_errors: true
+  
+- name: Create portworx storage data nodes true 
+  shell:  "govc snapshot.create -vm {{item}} '{{ snapshot_name }}'"
+  environment:
+   GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   GOVC_INSECURE: 1
+  with_items:
+    - "{{ sl_ocp_workers }}"
+  ignore_errors: true
+  
+- name: Create compute storage data nodes true 
+  shell:  "govc snapshot.create -vm {{item}} '{{ snapshot_name }}'"
+  environment:
+   GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   GOVC_INSECURE: 1
+  with_items:
+    - "{{ sl_ocp_registry_storage_worker }}"
+  ignore_errors: true
+  
+- name: Create control-plane nodes true 
+  shell:  "govc snapshot.create -vm {{sl_ocp_master_node_name_prefix}}{{item}} '{{ snapshot_name }}'"
+  environment:
+   GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   GOVC_INSECURE: 1
+  with_items:
+    - "0"
+    - "1"
+    - "2"
+  ignore_errors: true
+    
+
+  
+  
+  
+  
+  
+  

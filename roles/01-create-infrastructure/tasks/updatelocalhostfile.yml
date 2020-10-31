@@ -3,13 +3,15 @@
 # Get info for all the pak helper node
 ###############################################
 
- - name: Get Helpernode hostinfo
-   expect:
-     command: "slcli --format json  vs detail {{ item }}"
-     responses: 
-       (?i)Continue?: "y"
+ - name: Get Pak Helpernode hostinfo
+   command: "govc vm.info -json {{ item }}"
    register: contentof_pak_helpernodes
-   with_items: " {{ sl_ocp_pak_helpernode }}"
+   with_items: " {{ sl_ocp_pak_helpernode.hostname }}"
+   environment:
+     GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+     GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+     GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+     GOVC_INSECURE: 1
 
  - name: registering the entire list to new variable helper
    set_fact: 
@@ -17,11 +19,11 @@
    with_items:
        - "{{ contentof_pak_helpernodes.results }}"
    register: contentof_pak_helpernodes_stdout
-
+   
  - name: Add IP information to helper hosts variable
    set_fact:
-     allpakhelpernodehostsinfo: "{{ allpakhelpernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.private_ip} ) }}"
-     allpakhelpernodehostids: "{{ allpakhelpernodehostids|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.id} ) }}"
+     allpakhelpernodehostsinfo: "{{ allpakhelpernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
+     allpakhelpernodehostids: "{{ allpakhelpernodehostids|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
    with_items:
        - "{{ contentof_pak_helpernodes_stdout.results }}"
 
@@ -33,12 +35,14 @@
 ###############################################
 
  - name: Get Helpernode hostinfo
-   expect:
-     command: "slcli --format json  vs detail {{ item }}"
-     responses: 
-       (?i)Continue?: "y"
+   command: "govc vm.info -json {{ item }}"
    register: contentof_helpernodes
    with_items: " {{ sl_ocp_helpernode }}"
+   environment:
+     GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+     GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+     GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+     GOVC_INSECURE: 1
 
  - name: registering the entire list to new variable helper
    set_fact: 
@@ -49,8 +53,8 @@
 
  - name: Add IP information to helper hosts variable
    set_fact:
-     allhelpernodehostsinfo: "{{ allhelpernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.private_ip} ) }}"
-     allhelpernodehostids: "{{ allhelpernodehostids|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.id} ) }}"
+     allhelpernodehostsinfo: "{{ allhelpernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
+     allhelpernodehostids: "{{ allhelpernodehostids|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
    with_items:
        - "{{ contentof_helpernodes_stdout.results }}"
 
@@ -63,13 +67,14 @@
 ###############################################
 
  - name: Get Storage Workernodes hostinfo for Cloud pak for dataresult
-   expect:
-     command: "slcli --format json  vs detail {{ item }}"
-     responses: 
-       (?i)Continue?: "y"
+   command: "govc vm.info -json {{ item }}"
    register: contentof_storage_workernodes
    with_items: " {{ sl_ocp_portworx_storage_workers }}"
-
+   environment:
+     GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+     GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+     GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+     GOVC_INSECURE: 1
 
 
 
@@ -84,22 +89,25 @@
 
  - name: Add IP information to hosts variable
    set_fact:
-     allstorageworkernodehostsinfo: "{{ allstorageworkernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.private_ip} ) }}"
-     allstorageworkernodehostsids: "{{ allstorageworkernodehostsids|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.id} ) }}"
+     allstorageworkernodehostsinfo: "{{ allstorageworkernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
+     allstorageworkernodehostsids: "{{ allstorageworkernodehostsids|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
    with_items:
        - "{{ contentof_storage_workernodes_stdout.results }}"
+
 
 ##########
 ## Storage for OCP-registry
 ########
 
  - name: Get Storage Workernodes hostinfo for OCP-registry for dataresult
-   expect:
-     command: "slcli --format json  vs detail {{ item }}"
-     responses: 
-       (?i)Continue?: "y"
+   command: "govc vm.info -json {{ item }}"
    register: contentof_storage_registry_workernodes
    with_items: " {{ sl_ocp_registry_storage_worker }}"
+   environment:
+     GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+     GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+     GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+     GOVC_INSECURE: 1
 
  - name: registering the entire list to new variable
    set_fact: 
@@ -111,8 +119,8 @@
 
  - name: Add IP information to hosts variable
    set_fact:
-     allstoragocregistryeworkernodehostsinfo: "{{ allstoragocregistryeworkernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.private_ip} ) }}"
-     allstorageocregistryworkernodehostsids: "{{ allstorageocregistryworkernodehostsids|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.id} ) }}"
+     allstoragocregistryeworkernodehostsinfo: "{{ allstoragocregistryeworkernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
+     allstorageocregistryworkernodehostsids: "{{ allstorageocregistryworkernodehostsids|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
    with_items:
        - "{{ contentof_storage_registry_workernodes_stdout.results }}"
 
@@ -125,12 +133,14 @@
 ###############################################
 
  - name: Get Workernodes hostinfo
-   expect:
-     command: "slcli --format json  vs detail {{ item }}"
-     responses: 
-       (?i)Continue?: "y"
+   command: "govc vm.info -json {{ item }}"
    register: contentof_workernodes
    with_items: " {{ sl_ocp_workers }}"
+   environment:
+     GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+     GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+     GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+     GOVC_INSECURE: 1
 
 
 
@@ -146,8 +156,8 @@
 
  - name: Add IP information to hosts variable
    set_fact:
-     allworkernodehostsinfo: "{{ allworkernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.private_ip} ) }}"
-     allworkernodehostsids: "{{ allworkernodehostsids|default({}) | combine( {item.ansible_facts.dataresult.hostname: item.ansible_facts.dataresult.id} ) }}"
+     allworkernodehostsinfo: "{{ allworkernodehostsinfo|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
+     allworkernodehostsids: "{{ allworkernodehostsids|default({}) | combine( {item.ansible_facts.dataresult.VirtualMachines.0.Name: item.ansible_facts.dataresult.VirtualMachines.0.Summary.Guest.IpAddress} ) }}"
    with_items:
        - "{{ contentof_workernodes_stdout.results }}"
  

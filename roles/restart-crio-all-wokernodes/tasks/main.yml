@@ -1,0 +1,8 @@
+
+
+
+
+  - name: restart crio
+    shell: "sudo ls /tmp"
+    notify:
+      - restart cri-o

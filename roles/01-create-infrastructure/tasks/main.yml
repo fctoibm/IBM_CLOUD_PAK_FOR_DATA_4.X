@@ -3,5 +3,5 @@
 
 - include:  setupsl.yml
 - include:  download_iso.yml
-- include:  create_helper.yml
+- include:  create_pak_helper_node.yml
 - include: updatelocalhostfile.yml
