@@ -10,5 +10,5 @@
   when: '"runtime-addon-r36" in ASSEMBLY_TYPE'
 - include:  spark_install_cp4d.yml
   when: '"spark" in ASSEMBLY_TYPE'
-
-watson-studio_install_cp4d.yml
+- include:  watson-studio_install_cp4d.yml
+  when: '"watson-studio" in ASSEMBLY_TYPE'
