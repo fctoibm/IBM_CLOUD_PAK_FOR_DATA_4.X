@@ -11,3 +11,4 @@
 - include:  spark_install_cp4d.yml
   when: '"spark" in ASSEMBLY_TYPE'
 
+watson-studio_install_cp4d.yml
