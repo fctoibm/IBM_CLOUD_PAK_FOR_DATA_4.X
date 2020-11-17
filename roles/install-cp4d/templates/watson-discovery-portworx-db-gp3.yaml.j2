@@ -1,0 +1,13 @@
+#portworx-db-gp3.yaml.j2
+# db gp3 replica 3
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: portworx-db-gp3
+parameters:
+  io_profile: "db_remote"
+  repl: "3"
+allowVolumeExpansion: true
+provisioner: kubernetes.io/portworx-volume
+reclaimPolicy: Retain
+volumeBindingMode: Immediate

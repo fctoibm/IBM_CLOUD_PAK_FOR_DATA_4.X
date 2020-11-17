@@ -12,3 +12,12 @@
   when: '"spark" in ASSEMBLY_TYPE'
 - include:  watson-studio_install_cp4d.yml
   when: '"watson-studio" in ASSEMBLY_TYPE'
+- include:  watson-machine-learning_install_cp4d.yml
+  when: '"watson-machine-learning" in ASSEMBLY_TYPE'
+- include:  watson-open-scale_install_cp4d.yml
+  when: '"watson-open-scale" in ASSEMBLY_TYPE'
+- include: decision-optimization_install_cp4d.yml
+  when: '"decision-optimization" in ASSEMBLY_TYPE'
+- include: data-virtualization_install_cp4d.yml
+  when: '"data-virtualization" in ASSEMBLY_TYPE'
+  

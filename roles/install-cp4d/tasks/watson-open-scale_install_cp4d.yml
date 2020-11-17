@@ -11,7 +11,7 @@
   set_fact:
     PRIVATE_REGISTRY: "default-route-openshift-image-registry.apps.{{ base_domain_prefix }}.{{ base_domain }}"
     INTERNAL_OCP_REGISTRY: "image-registry.openshift-image-registry.svc:5000"
-    THIS_ASSEMBLY_TYPE: 'watson-discovery'
+    THIS_ASSEMBLY_TYPE: 'watson-open-scale'
 
 
 - name: Create a directory if it does not exist
@@ -56,79 +56,26 @@
 
 
 
-############################################
-- name: "Write out machine config file for {{THIS_ASSEMBLY_TYPE}} "
-  template:
-    src: ../templates/{{THIS_ASSEMBLY_TYPE}}-machineconfig.j2
-    dest: /opt/cp4d/pak/bin/{{THIS_ASSEMBLY_TYPE}}-machineconfig.yaml
 
-- name: Line test2
-  blockinfile:
-     path: /opt/cp4d/pak/repo.yaml
-     marker: "#------"
-     insertbefore: 'fileservers'
-     state: present
-     block: |
-      #watson-discovery-registry
-        - url: cp.icr.io
-          username: cp
-          apikey: {{ENTITLED_REGISTRY_KEY}}
-          namespace: "cp/watson-discovery"
-          name: watson-discovery-registry
-
-
-
-- name: Run cpd pre-req command to create roles
-  shell: "oc get secrets -n {{CP4D_NAMESPACE}} | grep default-dockercfg | awk '{print $1;}'"
-  register: contentof_ns_docker_cfg
-  args:
-    chdir: /opt/cp4d/pak/bin
-
-- name: Fact IBM Cloud ssh key 
-  set_fact:
-    np_dockercfg: "{{ contentof_ns_docker_cfg.stdout_lines.0 }}"
  
 
-- name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}}-portworx-db-gp3 file"
-  template:
-    src: ../templates/{{THIS_ASSEMBLY_TYPE}}-portworx-db-gp3.yaml.j2
-    dest: /opt/cp4d/pak/bin/{{THIS_ASSEMBLY_TYPE}}-portworx-db-gp3.yaml
+# - name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}} override file"
+  # template:
+    # src: ../templates/{{THIS_ASSEMBLY_TYPE}}.yaml.j2
+    # dest: /opt/cp4d/pak/bin/{{THIS_ASSEMBLY_TYPE}}.yaml
     
-- name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}} file for portworx"
-  template:
-    src: ../templates/{{THIS_ASSEMBLY_TYPE}}.j2
-    dest: /opt/cp4d/pak/bin/{{THIS_ASSEMBLY_TYPE}}.yaml
-
-###############################################
-- name: Run machine config for only {{THIS_ASSEMBLY_TYPE}}
-  shell: " oc create -f {{THIS_ASSEMBLY_TYPE}}-machineconfig.yaml"
-  args:
-    chdir: /opt/cp4d/pak/bin
-  ignore_errors: True
-
-- name: Verify machine config for only {{THIS_ASSEMBLY_TYPE}}
-  shell: "oc wait mcp/worker --for condition=updated --timeout=25m"
-  args:
-    chdir: /opt/cp4d/pak/bin
-  ignore_errors: True
-- pause:
-    seconds: 60 
 
 
-- name: Run portworx config for only {{THIS_ASSEMBLY_TYPE}}
-  shell: " oc create -f {{THIS_ASSEMBLY_TYPE}}-portworx-db-gp3.yaml"
-  args:
-    chdir: /opt/cp4d/pak/bin
-  ignore_errors: True
+
 
 
 - name: Run cpd pre-req command 
-  shell: "./cpd-linux adm --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --namespace {{CP4D_NAMESPACE}} --arch x86_64 --accept-all-licenses"
+  shell: "./cpd-linux adm --repo ../repo.yaml --assembly aiopenscale --namespace {{CP4D_NAMESPACE}} --arch x86_64 --accept-all-licenses"
   args:
     chdir: /opt/cp4d/pak/bin
 
 - name: Run cpd pre-req command with apply flag
-  shell: "./cpd-linux adm --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --namespace {{CP4D_NAMESPACE}} --arch x86_64 --apply --accept-all-licenses"
+  shell: "./cpd-linux adm --repo ../repo.yaml --assembly aiopenscale --namespace {{CP4D_NAMESPACE}} --arch x86_64 --apply --accept-all-licenses"
   args:
     chdir: /opt/cp4d/pak/bin
 
@@ -145,7 +92,7 @@
 
 
 - name: "Run the cpd install dry run command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 120 mins"
-  shell: "./cpd-linux  --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify --dry-run"
+  shell: "./cpd-linux  --repo ../repo.yaml --assembly aiopenscale --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify --dry-run"
   args:
     chdir: /opt/cp4d/pak/bin
 
@@ -154,7 +101,7 @@
   ignore_errors: True
 
 - name: "Run the cpd install command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 180 mins"
-  shell: "./cpd-linux  --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify"
+  shell: "./cpd-linux  --repo ../repo.yaml --assembly aiopenscale --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}} --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify"
   args:
     chdir: /opt/cp4d/pak/bin
 
