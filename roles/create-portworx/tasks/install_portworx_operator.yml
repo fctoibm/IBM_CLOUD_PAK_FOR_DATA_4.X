@@ -4,8 +4,8 @@
     PULLPOLICY: "Always"
     PX_CLUSTER_ID: "px-storage-cluster"
     NAMESPACE: "kube-system"
-    DISK1: "xvdc"
-    DISK2: "xvde"
+    DISK1: "{{ disk1_ptx_type }}"
+    DISK2: "{{ disk2_ptx_type }}"
 
 
 - name: Create a directory if it does not exist

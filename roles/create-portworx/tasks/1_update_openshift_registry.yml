@@ -9,13 +9,13 @@
   ignore_errors: true
 
 - name: Label the portworx Meta data nodes true 
-  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/metadata-node=true"
+  shell:  "oc label nodes {{item}} px/metadata-node=true"
   with_items:
     - "{{ sl_ocp_portworx_storage_workers }}"
   ignore_errors: true
 
 - name: Label the portworx storage data nodes true 
-  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/enabled=true"
+  shell:  "oc label nodes {{item}} px/enabled=true"
   with_items:
     - "{{ sl_ocp_portworx_storage_workers }}"
   ignore_errors: true
@@ -27,7 +27,7 @@
 #   ignore_errors: true
 
 - name: Label the portworx worker nodes true
-  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/storageless=true"
+  shell:  "oc label nodes {{item}} px/storageless=true"
   with_items:
     - "{{ sl_ocp_workers }}"
   ignore_errors: true

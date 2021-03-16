@@ -2,4 +2,4 @@
 # vars file for openshit-registry-local-volume
 
 local_storage_operator_version: "4.5"
-device_path: "/dev/xvdc"
+device_path: "/dev/{{ disk_regs_type }}"

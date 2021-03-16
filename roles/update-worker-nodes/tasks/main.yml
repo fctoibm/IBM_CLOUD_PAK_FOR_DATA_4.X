@@ -1,25 +1,26 @@
 ---
 # tasks file for update-worker-nodes
 
+  - name: Download the file  /etc/crio/crio.conf.d/00-default file
+    shell: "python3 -c \"import sys, urllib.parse; print(urllib.parse.unquote(sys.argv[1]))\" $(oc get $(oc get mc -o name --sort-by=.metadata.creationTimestamp | grep rendered-worker| tail -n1 ) -o jsonpath='{.spec.config.storage.files[?(@.path==\"/etc/crio/crio.conf.d/00-default\")].contents.source}' | awk -F\" \" '{print $1}' | sed 's/data:,//g')  > /tmp/crio.conf"
 
-  - name: Copy a crio.conf file on the remote machine for backup
-    copy:
-      src: /etc/crio/crio.conf
-      dest: /etc/crio/crio.conf.bak
-      remote_src: yes
-      force: no
+  # - name: Copy a crio.conf file on the remote machine for backup
+    # copy:
+      # src: /etc/crio/crio.conf.d/00-default
+      # dest: /etc/crio/orig-default.bak
+      # remote_src: yes
+      # force: no
     
   - name: Add the default_ulimitsto the /etc/crio/crio.conf file   
     become: yes 
     lineinfile:
-      path: /etc/crio/crio.conf
+      path: /tmp/crio.conf
       insertafter: '^\[crio.runtime\]'
       line: "default_ulimits = [\"nofile=66560:66560\"]"
       firstmatch: yes
       state: present
       backup: yes
-    notify:
-      - restart cri-o
+
 
 
   # - name: Add the default_ulimitsto the /etc/crio/crio.conf file   
@@ -39,32 +40,107 @@
   #   notify:
   #     - restart cri-o
 
-  - name:  add pids_limit to the /etc/crio/crio.conf file
+  - name:  add pids_limit to the /etc/crio/crio.conf.d/00-default file
     become: yes 
     lineinfile:
-      path: /etc/crio/crio.conf
+      path: /tmp/crio.conf
       regexp: '^pids_limit = [0-9].*'
       line: "pids_limit = 12288"
       state: present
-    notify:
-      - restart cri-o
+
+
+  - name: Download the file  /etc/crio/crio.conf.d/00-default file
+    shell: "cat /tmp/crio.conf | python3 -c \"import sys, urllib.parse; print(urllib.parse.quote(''.join(sys.stdin.readlines())))\""
+    register: crio_conf
+
+  - name: upload 51-worker-cp4d-crio-conf.yaml  file
+    template:
+      src: ../templates/51-worker-cp4d-crio-conf.yaml.j2
+      dest: /tmp/51-worker-cp4d-crio-conf.yaml
+      mode: 0644
+  
+  - name: execute oc command to delete crio conf on worker nodes 
+    shell: "oc delete -f /tmp/51-worker-cp4d-crio-conf.yaml"  
+    ignore_errors: True
+
+  
+  - name: execute oc command to update crio conf on worker nodes 
+    shell: "oc create -f /tmp/51-worker-cp4d-crio-conf.yaml"  
 
   - name: upload sysctl.d  file
     template:
-      src: ../files/42-cp4d.conf
-      dest: /etc/sysctl.d/42-cp4d.conf
+      src: ../templates/42-cp4d.yaml.j2
+      dest: /tmp/42-cp4d.yaml
+      mode: 0644
   
-  - name: execute sysctl for new file 
-    shell: "sysctl -p /etc/sysctl.d/42-cp4d.conf"
+  - name: execute oc command to delete sysctl on worker nodes 
+    shell: "oc delete -f /tmp/42-cp4d.yaml"
+    ignore_errors: True  
+  
+  - name: execute oc command to update sysctl on worker nodes 
+    shell: "oc create -f /tmp/42-cp4d.yaml"
+    
+    
+    
+  - name: Write out chrony file
+    template:
+      src: "{{ role_path }}/templates/chrony.conf.j2"
+      dest: /tmp/chrony.conf
+      mode: 0644
+    
+    
+  # - name: slurp the chrony 
+    # shell: "cat chrony.conf | base64"
+    # args:
+      # chdir: /tmp
+    # register: chrony_conf_base64
+    
+  - name: Read facts
+    slurp:
+      src: /tmp/chrony.conf
+    register: slurp_output
+
+  - name: upload worker-chrony-configuration.yml  file
+    template:
+      src: ../templates/worker-chrony-configuration.yml.j2
+      dest: /tmp/worker-chrony-configuration.yml
+      mode: 0644
+
+  - name: upload master-chrony-configuration.yml  file
+    template:
+      src: ../templates/master-chrony-configuration.yml.j2
+      dest: /tmp/master-chrony-configuration.yml
+      mode: 0644    
 
 
-  - name:  add pids_limit to the /etc/sysctl.conf file
-    become: yes 
-    lineinfile:
-      path: /etc/sysctl.conf
-      regexp: '^xen.independent_wallclock = 1*'
-      line: "xen.independent_wallclock = 1"
-      state: present
+  - name: execute oc command to update chrony on worker nodes 
+    shell: "oc create -f /tmp/worker-chrony-configuration.yml"
+    register: command_result
+    ignore_errors: True
+    changed_when:
+      - '"AlreadyExists" in command_result.stderr'
+    
+    
+  - name: execute oc command to update chrony on master nodes 
+    shell: "oc create -f /tmp/master-chrony-configuration.yml"
+    register: command_result
+    ignore_errors: True
+    changed_when:
+      - '"AlreadyExists" in command_result.stderr'
+    
+    
+    
+  # - name: execute sysctl for new file 
+    # shell: "sysctl -p /etc/sysctl.d/42-cp4d.conf"
+
+
+  # - name:  add pids_limit to the /etc/sysctl.conf file
+    # become: yes 
+    # lineinfile:
+      # path: /etc/sysctl.conf
+      # regexp: '^xen.independent_wallclock = 1*'
+      # line: "xen.independent_wallclock = 1"
+      # state: present
 
 
 

@@ -1,0 +1,8 @@
+---
+# defaults file for uninstall-cp4d
+
+govc_username: "{{vcenter_username}}" # overrides GOVC_USERNAME
+govc_password: "{{ vcenter_password }}" # overrides GOVC_PASSWORD
+govc_url: "https://{{ vcenter_ip }}/sdk"
+govc_insecure: 1
+govc_resource_pool: "{{ base_domain_prefix  }}" 

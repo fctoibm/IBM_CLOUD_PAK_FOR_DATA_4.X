@@ -1,0 +1,144 @@
+---
+# tasks file for install-cp4d
+# - name: Lable remove portworx storage nodes false
+#   shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/enabled-"
+#   with_items:
+#     - "{{ sl_ocp_workers }}"
+#   ignore_errors: true
+
+
+- name: Fact set PRIVATE_REGISTRY
+  set_fact:
+    PRIVATE_REGISTRY: "default-route-openshift-image-registry.apps.{{ base_domain_prefix }}.{{ base_domain }}"
+    INTERNAL_OCP_REGISTRY: "image-registry.openshift-image-registry.svc:5000"
+    THIS_ASSEMBLY_TYPE: 'wsl'
+
+
+- name: Create a directory if it does not exist
+  file:
+    path: /opt/cp4d/pak
+    state: directory
+
+
+- name: Dowloading cp4d installer clients 
+  get_url:
+    url: "{{ cp4d_installer }}"
+    dest: /opt/cp4d/pak
+    remote_src: yes
+
+
+- name: Find /opt/cp4d/pak files equal or greater than 2 megabytes ending .tgz via regex
+  find:
+    paths: /opt/cp4d/pak
+    size: 2m
+    patterns: "*.tgz"  
+  register: files_matched
+
+- name: Extract cp4d.tgz into  /opt/cp4d/pak
+  unarchive:
+    src: "{{ files_matched.files[0].path}}"
+    dest: /opt/cp4d/pak
+    remote_src: yes
+
+# - name: Dowloading cp4d installer clients 
+  # get_url:
+    # url: "{{ cp4d_installer }}"
+    # dest: /opt/cp4d/cpd-cli
+    # remote_src: yes
+    # mode: '+x'
+
+- name: Update the api key  
+  lineinfile:
+    path: /opt/cp4d/pak/repo.yaml
+    regexp: '    apikey:'
+    line: '    apikey: {{ENTITLED_REGISTRY_KEY}}'
+    state: present
+
+############################################
+# - name: Line test2
+#   blockinfile:
+#      path: /opt/cp4d/pak/repo.yaml
+#      insertbefore: 'fileservers'
+#      state: present
+#      block: |
+#       #wks-regitry
+#         - url: cp.icr.io
+#           username: cp
+#           apikey: {{ENTITLED_REGISTRY_KEY}}
+#           namespace: "cp/knowledge-studio"
+#           name: wks-registry
+
+
+
+
+
+
+###############################################
+
+
+
+- name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}} file"
+  template:
+    src: ../templates/watson-studio.j2
+    dest: /opt/cp4d/pak/watson-studio.yaml
+
+- name: Approve any pending CSRs 
+  shell: "oc get csr -o name | xargs oc adm certificate approve"
+  ignore_errors: True
+
+
+- name: Run cpd pre-req command 
+  shell: "./cpd-cli adm --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --namespace {{CP4D_NAMESPACE}} --arch x86_64 --accept-all-licenses"
+  args:
+    chdir: /opt/cp4d/pak
+
+
+- name: Run cpd pre-req command with apply 
+  shell: "./cpd-cli adm --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --namespace {{CP4D_NAMESPACE}} --arch x86_64 --apply --accept-all-licenses"
+  args:
+    chdir: /opt/cp4d/pak
+
+- name: Approve any pending CSRs 
+  shell: "oc label --overwrite namespace {{CP4D_NAMESPACE}} ns={{CP4D_NAMESPACE}}"
+  ignore_errors: True
+
+- name: Run cpd pre-req command to create roles
+  shell: "oc adm policy add-role-to-user cpd-admin-role  $(oc whoami | sed 's/://g') --role-namespace={{CP4D_NAMESPACE}} -n {{CP4D_NAMESPACE}}"
+  args:
+    chdir: /opt/cp4d/pak
+
+# - name: "Download the images to local folder assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 15 mins"
+#   shell: "./cpd-cli preloadImages --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}}  --action download --download-path ./{{THIS_ASSEMBLY_TYPE}} --accept-all-licenses "
+#   args:
+#     chdir: /opt/cp4d/pak
+
+
+
+- name: "Run the cpd install dry run command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 120 mins"
+  shell: "./cpd-cli install --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override watson-studio.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify --dry-run"
+  args:
+    chdir: /opt/cp4d/pak
+
+- name: Approve any pending CSRs 
+  shell: "oc get csr -o name | xargs oc adm certificate approve"
+  ignore_errors: True
+
+- name: "Run the cpd install command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 180 mins"
+  shell: "./cpd-cli install --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override watson-studio.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify"
+  args:
+    chdir: /opt/cp4d/pak
+
+- name: Approve any pending CSRs 
+  shell: "oc get csr -o name | xargs oc adm certificate approve"
+  ignore_errors: True
+
+##############
+# - name: "Run the cpd install command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 30 mins"
+#   shell: "./cpd-cli  --repo repo.yaml--assembly {{THIS_ASSEMBLY_TYPE}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --target-registry-password $(oc whoami -t) --target-registry-username  $(oc whoami | sed 's/://g') --storageclass portworx-shared-gp3 --insecure-skip-tls-verify --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --namespace {{CP4D_NAMESPACE}} -v {{ICPD_VERSION}} --accept-all-licenses"
+#   args:
+#     chdir: /opt/cp4d
+# - name: "push the images to local folder assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 5 mins"
+#   shell: "./cpd-cli preloadImages --action push --load-from=./{{THIS_ASSEMBLY_TYPE}} --transfer-image-to={{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username=$(oc whoami | sed 's/://g') --target-registry-password=$(oc whoami -t) -a lite --accept-all-licenses --insecure-skip-tls-verify --version {{ICPD_VERSION}}"
+#   args:
+#     chdir: /opt/cp4d/pak
+

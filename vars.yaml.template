@@ -54,7 +54,12 @@ ASSEMBLY_TYPE:
   - "lite"
 STORAGE_CLASS: "portworx-shared-gp3"
 
+# Portworx Disk type
+disk1_ptx_type: xvdc
+disk2_ptx_type: xvde
 
+# OCP Registery Disk type
+disk_regs_type: xvdc
 
 # latest cpd build 
 

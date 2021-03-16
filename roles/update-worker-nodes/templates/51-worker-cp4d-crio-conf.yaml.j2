@@ -1,0 +1,17 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+ labels:
+   machineconfiguration.openshift.io/role: worker
+ name: 51-worker-cp4d-crio-conf
+spec:
+ config:
+   ignition:
+     version: 2.2.0
+   storage:
+     files:
+     - contents:
+         source: data:,{{ crio_conf.stdout }}
+       filesystem: root
+       mode: 0644
+       path: /etc/crio/crio.conf.d/10-default

@@ -89,7 +89,12 @@
     np_dockercfg: "{{ contentof_ns_docker_cfg.stdout_lines.0 }}"
  
 
-- name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}} file"
+- name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}}-portworx-db-gp3 file"
+  template:
+    src: ../templates/{{THIS_ASSEMBLY_TYPE}}-portworx-db-gp3.yaml.j2
+    dest: /opt/cp4d/pak/bin/{{THIS_ASSEMBLY_TYPE}}-portworx-db-gp3.yaml
+    
+- name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}} file for portworx"
   template:
     src: ../templates/{{THIS_ASSEMBLY_TYPE}}.j2
     dest: /opt/cp4d/pak/bin/{{THIS_ASSEMBLY_TYPE}}.yaml
@@ -110,6 +115,11 @@
     seconds: 60 
 
 
+- name: Run portworx config for only {{THIS_ASSEMBLY_TYPE}}
+  shell: " oc create -f {{THIS_ASSEMBLY_TYPE}}-portworx-db-gp3.yaml"
+  args:
+    chdir: /opt/cp4d/pak/bin
+  ignore_errors: True
 
 
 - name: Run cpd pre-req command 

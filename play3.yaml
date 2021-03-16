@@ -5,22 +5,31 @@
 - hosts: vsi_sl_guest_storage_ocp_registry_workers
   pre_tasks:
      - include_vars: artifacts/vars.yaml
+  vars:
+    ansible_python_interpreter: /usr/libexec/platform-python
   roles:
      - prep-registry
-
-
-- hosts: vsi_sl_guest_storage_workers
-  pre_tasks:
-     - include_vars: artifacts/vars.yaml
-  roles:
-     - prep-portworx
-
-
+     
 - hosts: vsi_sl_pak_helper_guest
   pre_tasks:
      - include_vars: artifacts/vars.yaml
   roles:
      - create-openshift-registry-lv
+     
+- hosts: vsi_sl_guest_storage_workers
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  vars:
+    ansible_python_interpreter: /usr/libexec/platform-python
+  vars_prompt:
+    - name: "install_vcenter"
+      prompt: "Do you want to continue (yes/no)?  If yes, please make sure openshift-image-registry namespace pods are started."
+      private: no
+  roles:
+     - prep-portworx
+
+
+
 
 - hosts: vsi_sl_pak_helper_guest
   pre_tasks:

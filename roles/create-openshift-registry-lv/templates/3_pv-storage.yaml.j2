@@ -15,12 +15,12 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - {{sl_ocp_registry_storage_worker.0}}.{{ base_domain_prefix }}.{{ base_domain }}
+                - {{sl_ocp_registry_storage_worker.0}}
   capacity:
     storage: 500Gi
   accessModes:
     - ReadWriteMany
   local:
-    path: /mnt/local-storage/local-sc/xvdc
+    path: /mnt/local-storage/local-sc/{{ disk_regs_type }}
     fsType: ext4
 

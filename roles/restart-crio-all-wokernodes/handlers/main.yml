@@ -1,0 +1,7 @@
+---
+# handlers file for update-worker-nodes
+
+- name: restart cri-o
+  service:
+    name: cri-o
+    state: restarted

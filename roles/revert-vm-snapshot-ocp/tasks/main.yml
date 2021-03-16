@@ -1,0 +1,265 @@
+- name: Stop a virtual machines by name
+  vmware_guest:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item }}"
+    state: poweredoff
+    force: yes
+  loop:
+     - control-plane-0
+     - control-plane-1
+     - control-plane-2
+  delegate_to: localhost
+  
+  
+  
+
+- name: Stop a virtual machines by name compute
+  vmware_guest:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item.name}}"
+    state: poweredoff
+    force: yes
+  loop: "{{workers}}"
+  delegate_to: localhost
+
+
+
+- name: Revert Snapshot a virtual machines by name
+  vmware_guest_snapshot:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item }}"
+    state: revert
+    snapshot_name: "{{ snapshot_name }}"
+  loop:
+     - control-plane-0
+     - control-plane-1
+     - control-plane-2 
+  delegate_to: localhost
+ 
+
+
+
+- name: Revert Snapshot a virtual machines by name
+  vmware_guest_snapshot:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item.name}}"
+    state: revert
+    snapshot_name: "{{ snapshot_name }}"
+  loop: "{{workers}}"
+  delegate_to: localhost 
+
+       
+- name: Start a virtual machines by name
+  vmware_guest:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item }}"
+    state: poweredon
+    force: yes
+  loop:
+     - control-plane-0
+     - control-plane-1
+     - control-plane-2   
+  delegate_to: localhost
+  
+  
+  
+
+- name: Start a virtual machines by name compute
+  vmware_guest:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item.name}}"
+    state: poweredon
+    force: yes
+  loop: "{{workers}}"
+  delegate_to: localhost
+       
+# - name: Revert  portworx storage data nodes true 
+  # shell:  "govc snapshot.revert -vm {{item}} '{{ snapshot_name }}'"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_portworx_storage_workers }}"
+  # ignore_errors: true
+  
+# - name: Revert portworx storage data nodes true 
+  # shell:  "govc snapshot.revert -vm {{item}} '{{ snapshot_name }}'"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_workers }}"
+  # ignore_errors: true
+  
+# - name: Revert compute storage data nodes true 
+  # shell:  "govc snapshot.revert -vm {{item}} '{{ snapshot_name }}'"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_registry_storage_worker }}"
+  # ignore_errors: true
+  
+# - name: Revert control-plane nodes true 
+  # shell:  "govc snapshot.revert -vm {{sl_ocp_master_node_name_prefix}}{{item}} '{{ snapshot_name }}'"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "0"
+    # - "1"
+    # - "2"
+  # ignore_errors: true
+    
+
+
+
+####
+#Change the memory Size 
+
+# - name: Change the Memory and CPU  portworx storage data nodes true 
+  # shell:  "govc vm.change -vm {{item}} -m=65536 -c=32"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_portworx_storage_workers }}"
+  # ignore_errors: true
+  
+# - name: Change the Memory and CPU storage data nodes true 
+  # shell:  "govc vm.change -vm {{item}} -m=65536 -c=32"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_workers }}"
+  # ignore_errors: true
+  
+# - name: Change the Memory and CPU  data nodes true 
+  # shell:  "govc vm.change -vm {{item}} -m=65536 -c=32"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_registry_storage_worker }}"
+  # ignore_errors: true
+  
+# - name: Change the Memory and CPU  control-plane nodes true 
+  # shell:  "govc vm.change -vm {{sl_ocp_master_node_name_prefix}}{{item}} -m=16384 -c=24"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "0"
+    # - "1"
+    # - "2"
+  # ignore_errors: true
+    
+    
+    
+    
+
+  
+  ####
+#Start 
+################################################### 
+# - name: Start the portworx storage data nodes true 
+  # shell:  "govc vm.power -on=true  {{item}} "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_portworx_storage_workers }}"
+  # ignore_errors: true
+  
+# - name: start portworx storage data nodes true 
+  # shell:  "govc vm.power -on=true {{item}}"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_workers }}"
+  # ignore_errors: true
+  
+# - name: start compute storage data nodes true 
+  # shell:  "govc vm.power -on=true {{item}}"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_registry_storage_worker }}"
+  # ignore_errors: true
+  
+# - name: start control-plane nodes true 
+  # shell:  "govc vm.power -on=true  {{sl_ocp_master_node_name_prefix}}{{item}}"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "0"
+    # - "1"
+    # - "2"
+  # ignore_errors: true
+    
+ ###
+ 
+  
+  
+  
+  
+  
+  

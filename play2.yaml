@@ -2,6 +2,17 @@
 # Run final install command for OCP
 ############
 
+- hosts: vsi_sl_pak_helper_guest
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+     - update-pakhelper-nodes
+
+- hosts: vsi_sl_pak_helper_guest
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+     - update-worker-nodes
 
 - hosts: vsi_sl_guest_storage_workers
   pre_tasks:
@@ -9,16 +20,19 @@
   vars:
     ansible_python_interpreter: /usr/libexec/platform-python
   roles:
-     - update-worker-nodes
+     -  restart-crio-all-wokernodes
 
 - hosts: vsi_sl_guest_workers
   pre_tasks:
      - include_vars: artifacts/vars.yaml
+  vars:
+    ansible_python_interpreter: /usr/libexec/platform-python
   roles:
-     - update-worker-nodes
-
-- hosts: vsi_sl_pak_helper_guest
+     -  restart-crio-all-wokernodes
+- hosts: vsi_sl_guest_storage_ocp_registry_workers
   pre_tasks:
      - include_vars: artifacts/vars.yaml
+  vars:
+    ansible_python_interpreter: /usr/libexec/platform-python
   roles:
-     - update-pakhelper-nodes
+     -  restart-crio-all-wokernodes

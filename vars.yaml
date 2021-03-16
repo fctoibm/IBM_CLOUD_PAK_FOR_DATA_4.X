@@ -1,0 +1,100 @@
+
+
+
+
+
+
+# CP4D HOSTNAME INFO
+install_type: "vmware"
+# OPENSHIFT HOSTNAME INFO
+sl_ocp_worker_node_name_prefix: "compute-"
+sl_ocp_master_node_name_prefix: "control-plane-"
+
+
+sl_ocp_workers:
+  - "{{sl_ocp_worker_node_name_prefix}}0"
+  - "{{sl_ocp_worker_node_name_prefix}}4"
+  - "{{sl_ocp_worker_node_name_prefix}}5"
+  - "{{sl_ocp_worker_node_name_prefix}}6"
+  - "{{sl_ocp_worker_node_name_prefix}}7"
+  # - "{{sl_ocp_worker_node_name_prefix}}8"
+  # - "{{sl_ocp_worker_node_name_prefix}}9"
+
+
+
+# (minimum three worker nodes requirement for Portworx storage)
+sl_ocp_portworx_storage_workers:
+
+  - "{{sl_ocp_worker_node_name_prefix}}1"
+  - "{{sl_ocp_worker_node_name_prefix}}2"
+  - "{{sl_ocp_worker_node_name_prefix}}3"
+
+
+# (minimum 1 worker nodes requirement Openshfit internal Registry storage. This node can not be Portworx storage node)
+sl_ocp_registry_storage_worker: 
+  - "{{sl_ocp_worker_node_name_prefix}}0"
+
+sl_ocp_helpernode:
+  - "helper"
+
+
+sl_ocp_pak_helpernode:
+   hostname: "pak-helper"
+   ip_address: "10.75.17.105"
+
+#OpenShift information 
+ocp_api_fqdn: api.{{ base_domain_prefix }}.{{ base_domain }} 
+ocp_auth_fdqn: oauth-openshift.apps.{{ base_domain_prefix }}.{{ base_domain }} 
+ocp_api_port: 6443
+ocp_ip: 10.75.17.107
+oc_admin_user: "kubeadmin"
+oc_admin_password: "bCjjF-QaNSU-uATwF-yKwUm" 
+
+
+# Cloud Pak For Data Entitlement Information
+ICPD_VERSION: "3.5.0"
+ENTITLED_REGISTRY: "cp.icr.io"
+ENTITLED_REGISTRY_USER: "ekey"
+# Follow the instruction ( https://myibm.ibm.com/products-services/containerlibrary  )to download token
+ENTITLED_REGISTRY_KEY: "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJJQk0gTWFya2V0cGxhY2UiLCJpYXQiOjE1ODA4Mzg3MzcsImp0aSI6IjliOWUyM2NkMzIzYjRmMjJhNDA3OThmODY3NzFjZjU0In0.zaRMeZk5HQvGdIlB6h3EgGQcJuCt7G9n6LEVQcnrPzs"
+
+CP4D_NAMESPACE: "zen"
+# supported assembly type [ watson-ks, lite, spark, watson-discovery runtime-addon-r36 watson-studio watson-machine-learning watson-open-scale decision-optimization data-virtualization]
+
+ASSEMBLY_TYPE: 
+  #- "lite"
+  #- "cognos_analytics"
+  #- "spss_modeler"
+  #- "streams"
+  #- "datastage_enterprise_plus"
+  - "execution_engine_for_apache_hadoop"
+  #- "watson-ks"
+  #- "watson-discovery"
+  #- "watson-studio"
+  #- "watson-machine-learning"
+  #- "watson-open-scale"
+  #- "decision-optimization"
+  #- "data-virtualization"
+  
+STORAGE_CLASS: "portworx-shared-gp3"
+
+###
+# Portworx Disk type
+disk1_ptx_type: sdb
+disk2_ptx_type: sdc
+
+# OCP Registery Disk type
+disk_regs_type: sdb
+
+#
+
+#snapshot_name: "Clean OCP 4.5 Updated " 
+#snapshot_name: "Updated Hardware Config and before CP4D 4.5 install" 
+snapshot_name: "After lite addon"
+#snapshot_name: "frank_Team_addon_completed"
+cp4d_installer: "https://github.com/IBM/cpd-cli/releases/download/v3.5.0/cpd-cli-linux-EE-3.5.1.tgz"
+              
+
+cp4d_repo: "https://ibm-open-platform.ibm.com/repos/3.1-la/cpd/3.0.1/repo.yaml"
+
+ntp_server: "10.75.2.12"

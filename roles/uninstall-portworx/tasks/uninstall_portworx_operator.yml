@@ -17,19 +17,19 @@
 
 
 - name: Label the portworx Meta data nodes true 
-  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/metadata-node-"
+  shell:  "oc label nodes {{item}} px/metadata-node-"
   with_items:
     - "{{ sl_ocp_portworx_storage_workers }}"
   ignore_errors: true
 
 - name: Label the portworx storage data nodes true 
-  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/enabled-"
+  shell:  "oc label nodes {{item}} px/enabled-"
   with_items:
     - "{{ sl_ocp_portworx_storage_workers }}"
   ignore_errors: true
 
 - name: Label remove portworx storage nodes false
-  shell:  "oc label nodes {{item}}.{{base_domain_prefix}}.{{base_domain}} px/enabled-"
+  shell:  "oc label nodes {{item}} px/enabled-"
   with_items:
     - "{{ sl_ocp_workers }}"
   ignore_errors: true

@@ -1,0 +1,16 @@
+
+# - hosts: vsi_sl_pak_helper_guest
+  # pre_tasks:
+     # - include_vars: artifacts/vars.yaml
+  # roles:
+    # - uninstall-cp4d
+    # - uninstall-portworx
+ 
+- hosts: local_host
+  pre_tasks:
+     - include_vars: artifacts/vars.yaml
+  roles:
+    -  revert-vm-snapshot-ocp
+
+    
+   

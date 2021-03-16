@@ -1,0 +1,254 @@
+
+
+
+ 
+- name: Stop a virtual machines by name
+  vmware_guest:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item }}"
+    state: poweredoff
+    force: yes
+  loop:
+     - control-plane-0
+     - control-plane-1
+     - control-plane-2
+  delegate_to: localhost
+  
+  
+  
+
+- name: Stop a virtual machines by name compute
+  vmware_guest:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item.name}}"
+    state: poweredoff
+    force: yes
+  loop: "{{workers}}"
+  delegate_to: localhost
+
+
+
+- name: Creatte Snapshot a virtual machines by name
+  vmware_guest_snapshot:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item }}"
+    state: present
+    snapshot_name: "{{ snapshot_name }}"
+  loop:
+     - control-plane-0
+     - control-plane-1
+     - control-plane-2 
+  delegate_to: localhost
+ 
+
+
+
+- name: Creatte Snapshot a virtual machines by name
+  vmware_guest_snapshot:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item.name}}"
+    state: present
+    snapshot_name: "{{ snapshot_name }}"
+  loop: "{{workers}}"
+  delegate_to: localhost 
+
+       
+- name: Start a virtual machines by name
+  vmware_guest:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item }}"
+    state: poweredon
+    force: yes
+  loop:
+     - control-plane-0
+     - control-plane-1
+     - control-plane-2   
+  delegate_to: localhost
+  
+  
+  
+
+- name: Start a virtual machines by name compute
+  vmware_guest:
+    hostname: "{{ vcenter_ip }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: '{{ vcenter_datacenter }}/vm/{{ base_domain_prefix }}'
+    validate_certs: no
+    name: "{{ item.name}}"
+    state: poweredon
+    force: yes
+  loop: "{{workers}}"
+  delegate_to: localhost
+  
+####
+#Shutdown 
+################################################### 
+# - name: Shutdown the portworx storage data nodes true 
+  # shell:  "govc vm.power -off  {{item}} "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_portworx_storage_workers }}"
+  # ignore_errors: true
+  
+# - name: Shutdown portworx storage data nodes true 
+  # shell:  "govc vm.power -off  {{item}} "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_workers }}"
+  # ignore_errors: true
+  
+  
+# - name: Shutdown control-plane nodes true 
+  # shell:  "govc vm.power -off  {{sl_ocp_master_node_name_prefix}}{{item}} "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "0"
+    # - "1"
+    # - "2"
+  # ignore_errors: true
+    
+ ###
+ 
+ 
+# - name: Create  portworx storage data snapshot
+  # shell:  "govc snapshot.create  -vm {{item}} '{{ snapshot_name }}'"
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"    
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_portworx_storage_workers }}"
+  # ignore_errors: true
+  
+# - name: Create portworx storage data data snapshot 
+  # shell:  "govc snapshot.create -vm {{item}} '{{ snapshot_name }}'  "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"    
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_workers }}"
+  # ignore_errors: true
+  
+  
+# - name: Create control-plane data snapshot
+  # shell:  "govc snapshot.create -vm {{sl_ocp_master_node_name_prefix}}{{item}} '{{ snapshot_name }}'  "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"    
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "0"
+    # - "1"
+    # - "2"
+  # ignore_errors: true
+    
+
+  
+ #######################
+ 
+   ####
+#Power ON Machne 
+################################################### 
+# - name: Start the portworx storage data nodes true 
+  # shell:  "govc vm.power -on  {{item}}   "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"    
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_portworx_storage_workers }}"
+  # ignore_errors: true
+  
+# - name: start portworx storage data nodes true 
+  # shell:  "govc vm.power -on {{item}}  "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"    
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "{{ sl_ocp_workers }}"
+  # ignore_errors: true
+  
+  
+# - name: start control-plane nodes true 
+  # shell:  "govc vm.power -on  {{sl_ocp_master_node_name_prefix}}{{item}}  "
+  # environment:
+   # GOVC_USERNAME: "{{ govc_username | default(ansible_env.GOVC_USERNAME) }}"
+   # GOVC_PASSWORD: "{{ govc_password | default(ansible_env.GOVC_PASSWORD) }}"
+   # GOVC_URL: "{{ govc_url | default(ansible_env.GOVC_URL) }}"    
+   # GOVC_RESOURCE_POOL: "{{ govc_resource_pool | default(ansible_env.GOVC_RESOURCE_POOL) }}"
+   # GOVC_DATASTORE:  "{{ target_esx_datastore }}"
+   # GOVC_INSECURE: 1
+  # with_items:
+    # - "0"
+    # - "1"
+    # - "2"
+  # ignore_errors: true
+    
+ ###
+ 
+  
+  
+  
+  

@@ -40,12 +40,12 @@
     dest: /opt/cp4d/pak
     remote_src: yes
 
-- name: Dowloading cp4d installer clients 
-  get_url:
-    url: "{{ cp4d_installer }}"
-    dest: /opt/cp4d/cpd-linux
-    remote_src: yes
-    mode: '+x'
+# - name: Dowloading cp4d installer clients 
+  # get_url:
+    # url: "{{ cp4d_installer }}"
+    # dest: /opt/cp4d/pak/cpd-cli
+    # remote_src: yes
+    # mode: '+x'
 
 - name: Update the api key  
   lineinfile:
@@ -59,54 +59,54 @@
 - name: "Write out assembly type {{THIS_ASSEMBLY_TYPE}} file"
   template:
     src: ../templates/{{THIS_ASSEMBLY_TYPE}}.j2
-    dest: /opt/cp4d/pak/bin/{{THIS_ASSEMBLY_TYPE}}.yaml
+    dest: /opt/cp4d/pak/{{THIS_ASSEMBLY_TYPE}}.yaml
 
 - name: Run cpd pre-req command 
-  shell: "./cpd-linux adm --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --namespace {{CP4D_NAMESPACE}} --arch x86_64 --accept-all-licenses"
+  shell: "./cpd-cli adm --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --namespace {{CP4D_NAMESPACE}} --arch x86_64 --accept-all-licenses"
   args:
-    chdir: /opt/cp4d/pak/bin
+    chdir: /opt/cp4d/pak
 
 
 - name: Run cpd pre-req command 
-  shell: "./cpd-linux adm --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --namespace {{CP4D_NAMESPACE}} --arch x86_64 --apply --accept-all-licenses"
+  shell: "./cpd-cli adm --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --namespace {{CP4D_NAMESPACE}} --arch x86_64 --apply --accept-all-licenses"
   args:
-    chdir: /opt/cp4d/pak/bin
+    chdir: /opt/cp4d/pak
 
 - name: Run cpd pre-req command to create roles
   shell: "oc adm policy add-role-to-user cpd-admin-role  $(oc whoami | sed 's/://g') --role-namespace={{CP4D_NAMESPACE}} -n {{CP4D_NAMESPACE}}"
   args:
-    chdir: /opt/cp4d/pak/bin
+    chdir: /opt/cp4d/pak
 
 - name: "Download the images to local folder assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 15 mins"
-  shell: "./cpd-linux preloadImages --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}}  --action download --download-path ./{{THIS_ASSEMBLY_TYPE}} --accept-all-licenses "
+  shell: "./cpd-cli preload-images --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}}  --action download --download-path ./{{THIS_ASSEMBLY_TYPE}} --accept-all-licenses "
   args:
-    chdir: /opt/cp4d/pak/bin
+    chdir: /opt/cp4d/pak
 
 # - name: "push the images to local folder assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 5 mins"
-#   shell: "./cpd-linux preloadImages --action push --load-from=./{{THIS_ASSEMBLY_TYPE}} --transfer-image-to={{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username=$(oc whoami | sed 's/://g') --target-registry-password=$(oc whoami -t) -a lite --accept-all-licenses --insecure-skip-tls-verify --version {{ICPD_VERSION}}"
+#   shell: "./cpd-cli preloadImages --action push --load-from=./{{THIS_ASSEMBLY_TYPE}} --transfer-image-to={{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username=$(oc whoami | sed 's/://g') --target-registry-password=$(oc whoami -t) -a lite --accept-all-licenses --insecure-skip-tls-verify --version {{ICPD_VERSION}}"
 #   args:
-#     chdir: /opt/cp4d/pak/bin
+#     chdir: /opt/cp4d/pak
 
 - name: "Run the cpd install dry run command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 30 mins"
-  shell: "./cpd-linux  --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify --dry-run"
+  shell: "./cpd-cli  install --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify --dry-run"
   args:
-    chdir: /opt/cp4d/pak/bin
+    chdir: /opt/cp4d/pak
 
 - name: Approve any pending CSRs 
   shell: "oc get csr -o name | xargs oc adm certificate approve"
   ignore_errors: True
 
 - name: "Run the cpd install command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 30 mins"
-  shell: "./cpd-linux  --repo ../repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify"
+  shell: "./cpd-cli install  --repo repo.yaml --assembly {{THIS_ASSEMBLY_TYPE}} --arch x86_64  --namespace {{CP4D_NAMESPACE}} --storageclass {{STORAGE_CLASS}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --target-registry-username $(oc whoami | sed 's/://g') --target-registry-password $(oc whoami -t) --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --cluster-pull-username=$(oc whoami | sed 's/://g') --cluster-pull-password=$(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify"
   args:
-    chdir: /opt/cp4d/pak/bin
+    chdir: /opt/cp4d/pak
 
 - name: Approve any pending CSRs 
   shell: "oc get csr -o name | xargs oc adm certificate approve"
   ignore_errors: True
 
 # - name: "Run the cpd install command with assembly type {{THIS_ASSEMBLY_TYPE}} in name {{CP4D_NAMESPACE}}. This task can take up to 30 mins"
-#   shell: "./cpd-linux  --repo repo.yaml--assembly {{THIS_ASSEMBLY_TYPE}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --target-registry-password $(oc whoami -t) --target-registry-username  $(oc whoami | sed 's/://g') --storageclass portworx-shared-gp3 --insecure-skip-tls-verify --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --namespace {{CP4D_NAMESPACE}} -v {{ICPD_VERSION}} --accept-all-licenses"
+#   shell: "./cpd-cli  --repo repo.yaml--assembly {{THIS_ASSEMBLY_TYPE}}  --override {{THIS_ASSEMBLY_TYPE}}.yaml --target-registry-password $(oc whoami -t) --target-registry-username  $(oc whoami | sed 's/://g') --storageclass portworx-shared-gp3 --insecure-skip-tls-verify --cluster-pull-prefix {{INTERNAL_OCP_REGISTRY}}/{{CP4D_NAMESPACE}} --transfer-image-to {{PRIVATE_REGISTRY}}/{{CP4D_NAMESPACE}} --namespace {{CP4D_NAMESPACE}} -v {{ICPD_VERSION}} --accept-all-licenses"
 #   args:
 #     chdir: /opt/cp4d
 

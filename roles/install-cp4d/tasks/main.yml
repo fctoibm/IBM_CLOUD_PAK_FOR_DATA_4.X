@@ -1,4 +1,3 @@
-# tasks file for create-rehdat-container-storage
 - include:  0_setup_oc_login.yml
 - include:  lite_install_cp4d.yml
   when: '"lite" in ASSEMBLY_TYPE' 
@@ -10,4 +9,23 @@
   when: '"runtime-addon-r36" in ASSEMBLY_TYPE'
 - include:  spark_install_cp4d.yml
   when: '"spark" in ASSEMBLY_TYPE'
-
+- include:  watson-studio_install_cp4d.yml
+  when: '"watson-studio" in ASSEMBLY_TYPE'
+- include:  watson-machine-learning_install_cp4d.yml
+  when: '"watson-machine-learning" in ASSEMBLY_TYPE'
+- include:  watson-open-scale_install_cp4d.yml
+  when: '"watson-open-scale" in ASSEMBLY_TYPE'
+- include: decision-optimization_install_cp4d.yml
+  when: '"decision-optimization" in ASSEMBLY_TYPE'
+- include: data-virtualization_install_cp4d.yml
+  when: '"data-virtualization" in ASSEMBLY_TYPE'
+- include: cognos_analytics_install_cp4d.yml
+  when: '"cognos_analytics" in ASSEMBLY_TYPE'
+- include: spss_modeler_install_cp4d.yml
+  when: '"spss_modeler" in ASSEMBLY_TYPE'
+- include: streams_install_cp4d.yml
+  when: '"streams" in ASSEMBLY_TYPE'  
+- include: datastage_enterprise_plus_install_cp4d.yml
+  when: '"datastage_enterprise_plus" in ASSEMBLY_TYPE'  
+- include: execution_engine_for_apache_hadoop_install_cp4d.yml
+  when: '"execution_engine_for_apache_hadoop" in ASSEMBLY_TYPE'  

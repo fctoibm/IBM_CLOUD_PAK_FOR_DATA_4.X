@@ -2,6 +2,14 @@
   yum:
     name: podman
     state: latest
+    
+    
+
+- name: Copy a "sudoers" file on the remote machine for editing
+  copy:
+    src: /opt/cp4d/storage/portworx/Enterprise/cpd-portworx/px-images/px_2.5.5.0-dist.tgz 
+    dest: /opt/cp4d/storage/portworx/Enterprise/cpd-portworx/px-images/px_2.5.5-dist.tgz
+    remote_src: yes    
 
 
 - name: Fact set PRIVATE_REGISTRY
@@ -34,7 +42,7 @@
 
 - name: Update the YES to 1  
   lineinfile:
-    path: /opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/px-install.sh
+    path: /opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.x/px-install.sh
     regexp: 'YES=0'
     line: 'YES=1'
     state: present
@@ -42,14 +50,14 @@
 # - name: Install Portworx operator
 #   shell:
 #     cmd: "./px-install.sh -reg-pull {{PRIVATE_REGISTRY}} -reg-suffix kube-system  install-operator"
-#     chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/"
+#     chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.x/"
 
       
 
 - name: Install Portworx operator
   shell:
     cmd: "./px-install.sh install-operator"
-    chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/"
+    chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.x/"
 
       
 - pause:
@@ -57,7 +65,7 @@
 
 - name: Provision Portworx Storage cluster
   shell:  
-    cmd: "./px-install.sh  -reg-pull {{PRIVATE_REGISTRY}} -reg-suffix kube-system install-storage /dev/xvdc /dev/xvde "
-    chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.3/"
+    cmd: "./px-install.sh  -reg-pull {{PRIVATE_REGISTRY}} -reg-suffix kube-system install-storage /dev/{{ disk1_ptx_type }} /dev/{{ disk2_ptx_type }} "
+    chdir: "/opt/cp4d/storage/portworx/{{portworx_dir_type}}/cpd-portworx/px-install-4.x/"
 
 

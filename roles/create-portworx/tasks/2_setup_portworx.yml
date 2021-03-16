@@ -22,13 +22,13 @@
     cmd: "yes | /opt/cp4d/storage/portworx/portworx.bin"
     chdir: "/opt/cp4d/storage/portworx/"
 
-- name: Check directory ee exists 
+- name: Check directory Enterprise exists 
   stat:
-    path: /opt/cp4d/storage/portworx/ee
+    path: /opt/cp4d/storage/portworx/Enterprise
   register: ee_dir
 
-- name: set the facts if its ee
-  set_fact: portworx_dir_type="ee"
+- name: set the facts if its Enterprise
+  set_fact: portworx_dir_type="Enterprise"
   when: ee_dir.stat.exists and ee_dir.stat.isdir
 
 - name: Check directory std exists 

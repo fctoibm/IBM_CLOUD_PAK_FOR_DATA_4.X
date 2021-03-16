@@ -2,25 +2,25 @@
 # tasks file for prep-portworx
 
 - name: Check if hard disk exist
-  shell: "lsblk |  grep xvdc"
+  shell: "lsblk |  grep {{ disk1_ptx_type }}"
   register: contentof_lsblk
 
 - name: Only go forward is hard disk exist
-  when: contentof_lsblk.stdout.find('xvdc') != -1
-  debug: msg="xvdc exists"
+  when: contentof_lsblk.stdout.find('{{ disk1_ptx_type }}') != -1
+  debug: msg="{{ disk1_ptx_type }} exists"
 
 - name:  Check if hard disk exist
-  shell: "lsblk |  grep xvde"
+  shell: "lsblk |  grep {{ disk2_ptx_type }}"
   register: contentof_lsblk
 
 - name: Only go forward is hard disk exist
-  when: contentof_lsblk.stdout.find('xvde') != -1
-  debug: msg="xvde exists"
+  when: contentof_lsblk.stdout.find('{{ disk2_ptx_type }}') != -1
+  debug: msg="{{ disk2_ptx_type }} exists"
     
-- name: Erase disk xvdc
-  shell: "dd if=/dev/zero of=/dev/xvdc bs=1M count=2"
+- name: Erase disk {{ disk1_ptx_type }}
+  shell: "dd if=/dev/zero of=/dev/{{ disk1_ptx_type }} bs=1M count=2"
  
-- name: Erase disk xvde
-  shell: "dd if=/dev/zero of=/dev/xvde bs=1M count=2"
+- name: Erase disk {{ disk2_ptx_type }}
+  shell: "dd if=/dev/zero of=/dev/{{ disk2_ptx_type }} bs=1M count=2"
     
 

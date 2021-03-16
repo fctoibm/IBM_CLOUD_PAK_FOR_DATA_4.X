@@ -6,6 +6,10 @@
   pre_tasks:
      - include_vars: artifacts/vars.yaml
   roles:
-    - create-infrastructure
+    - role: create-infrastructure
+      when: install_type == 'sl'
+    - role: 01-create-infrastructure
+      when: install_type == 'vmware'
+
 
 

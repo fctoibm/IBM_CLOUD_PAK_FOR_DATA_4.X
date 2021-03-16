@@ -1,0 +1,80 @@
+
+
+
+
+
+
+# CP4D HOSTNAME INFO
+install_type: "vmware"
+# OPENSHIFT HOSTNAME INFO
+sl_ocp_worker_node_name_prefix: "compute-"
+sl_ocp_master_node_name_prefix: "control-plane-"
+
+
+sl_ocp_workers:
+  - "{{sl_ocp_worker_node_name_prefix}}4"
+  - "{{sl_ocp_worker_node_name_prefix}}5"
+  - "{{sl_ocp_worker_node_name_prefix}}6"
+  - "{{sl_ocp_worker_node_name_prefix}}7"
+  - "{{sl_ocp_worker_node_name_prefix}}8"
+  - "{{sl_ocp_worker_node_name_prefix}}9"
+  - "{{sl_ocp_worker_node_name_prefix}}10"
+  - "{{sl_ocp_worker_node_name_prefix}}11"
+  - "{{sl_ocp_worker_node_name_prefix}}12"
+  - "{{sl_ocp_worker_node_name_prefix}}13"
+  - "{{sl_ocp_worker_node_name_prefix}}14"
+
+
+# (minimum three worker nodes requirement for Portworx storage)
+sl_ocp_portworx_storage_workers:
+
+  - "{{sl_ocp_worker_node_name_prefix}}1"
+  - "{{sl_ocp_worker_node_name_prefix}}2"
+  - "{{sl_ocp_worker_node_name_prefix}}3"
+
+
+# (minimum 1 worker nodes requirement Openshfit internal Registry storage. This node can not be Portworx storage node)
+sl_ocp_registry_storage_worker: 
+  - "{{sl_ocp_worker_node_name_prefix}}0"
+
+sl_ocp_helpernode:
+  - "helper"
+
+
+sl_ocp_pak_helpernode:
+   hostname: "pak-helper"
+   ip_address: "10.75.17.121"
+
+#OpenShift information 
+ocp_api_fqdn: api.{{ base_domain_prefix }}.{{ base_domain }} 
+ocp_auth_fdqn: oauth-openshift.apps.{{ base_domain_prefix }}.{{ base_domain }} 
+ocp_api_port: 
+ocp_ip: 
+oc_admin_user: "kubeadmin"
+oc_admin_password: "" 
+
+
+# Cloud Pak For Data Entitlement Information
+ICPD_VERSION: "3.0.1"
+ENTITLED_REGISTRY: "cp.icr.io"
+ENTITLED_REGISTRY_USER: "ekey"
+# Follow the instruction ( https://myibm.ibm.com/products-services/containerlibrary  )to download token
+ENTITLED_REGISTRY_KEY: ""
+CP4D_NAMESPACE: "zen"
+# supported assembly type [ wks-registry, lite, spark, watson-discovery runtime-addon-r36]
+ASSEMBLY_TYPE: 
+  - "lite"
+STORAGE_CLASS: "portworx-shared-gp3"
+
+# Portworx Disk type
+disk1_ptx_type: sdb
+disk2_ptx_type: sdc
+
+# OCP Registery Disk type
+disk_regs_type: sdb
+
+# latest cpd build 
+
+cp4d_installer: "https://github.com/IBM/cpd-cli/releases/download/cpd-3.0.1/cloudpak4data-ee-3.0.1.tgz"
+
+cp4d_repo: "https://ibm-open-platform.ibm.com/repos/3.1-la/cpd/3.0.1/repo.yaml"

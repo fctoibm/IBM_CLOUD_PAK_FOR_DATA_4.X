@@ -1,0 +1,34 @@
+
+storageocpregistryworkerhostids:
+# hostname: compute-0
+  - 10.75.17.114     
+
+
+storageworkerhostids:
+# hostname: compute-1
+  - 10.75.17.115     
+# hostname: compute-3
+  - 10.75.17.117     
+# hostname: compute-2
+  - 10.75.17.116     
+
+
+datapakworkerhostids:
+# hostname: compute-5
+  - 10.75.17.123     
+# hostname: compute-4
+  - 10.75.17.122     
+# hostname: compute-7
+  - 10.75.17.102     
+# hostname: compute-6
+  - 10.75.17.124     
+# hostname: compute-0
+  - 10.75.17.114     
+
+pakhelperhostids:
+# hostname: pak-helper
+  - 10.75.17.105     
+
+helperhostids:
+# hostname: helper
+  - 10.75.17.107     

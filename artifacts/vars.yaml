@@ -1,0 +1,211 @@
+# This can be downlaod from RedHat OpensShift 
+pullsecret:  '{"auths":{"cloud.openshift.com":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K3NlbnRoaWxfa19rYWxpYW11cnRoeTFjcmt2eHJ4MWQ0ZXhiY2wydnh0N3c3ZHBqMjo3TFBWRFdRTEhORERXSUpZMk80WEpBMTZFTVlRRUNUUFFLRU40WkJNUlg5RFEyV0RTT1FBUzk0UEdRQjhGRjhK","email":"senthilk@us.ibm.com"},"quay.io":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K3NlbnRoaWxfa19rYWxpYW11cnRoeTFjcmt2eHJ4MWQ0ZXhiY2wydnh0N3c3ZHBqMjo3TFBWRFdRTEhORERXSUpZMk80WEpBMTZFTVlRRUNUUFFLRU40WkJNUlg5RFEyV0RTT1FBUzk0UEdRQjhGRjhK","email":"senthilk@us.ibm.com"},"registry.connect.redhat.com":{"auth":"NTI5OTY4NjF8dWhjLTFjckt2WFJ4MWQ0RVhCY0wydlh0N1c3RHBqMjpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTNOMk00TjJVeFptWTFNakUwWVRNellUVXhOV0pqTkRZeVpEUTBOMll5TUNKOS5Zb01iRm5KR2tTcUNndE02UlZieFI1ZG5uemFYdktUQlktT2swZk5BOUVuUWROYkpBZWJxWi0wT0dJMlA5c3NQdmtCd1dmUjBOc3k0OHlYTDVaZ3B1cmVIUUNOQlhQQ1VRXzZ4YV95UkI3QWFXY2ROSlNxY0M3bmJNakhJOVpwcUt4WTNEYVp5TXVSR3htcTZ1SUNXX1UzXzNaWTZZajVvY08zZDBZZlhtWEV1bmZ0MXJzanNlUHIxNEdRM19QYXplSzhUakwzSUpYQ2l0UUl6Rl9peGFwYjV2Mjk3dkUwaUZGSVl5a2ltSUp5TlNGdlRXSkVLLWlvS290ZC1pMjBYQ2NNNFFfbFJ6UC1EWHdJSWdDV0ZJYjNwMWNNRDJGVk9xUUlHbF9iS0FleHRxNElaVzJTZ01ISTJBSGxITG1Wa2tRejN2TEZiUGJ6ZlpRZFRTZW56OGRrRFAtVFQ0TmpLWl8xWUtjRlpsa1NSSU8tN2JIdkw5bE5MZ0dEaE1kUnYya3kwUzNCUU44dlhrbE9iWWZoOGpIWVplM29iQUJRRGpFaW5ycFducUd4aGpkVGxfRTFobXpraTVoRkpKVzNxeTU1ZnFjX0ViNlEzMHJwQUFkNkRTV0dVTEV1V1Btb2l5dTZyOGdvMUVWcGZIOHJYS09QaG4zcjVhMG9hcFQ1NjZGVGIzeXRmeGhPZXB1Uk50OGxaUXhvbXZaYWtWVmNFYTZyZF96WnA1OWhuWURxZEJVOVE4S0FnUFBVMmNJaV85NGg1czdycGxhU0piOVhYbUU0LTZWLWxzcUhDSTNFS1BEdzlTNFpCLURyb0xKeXBYUmU0TnMwZ3o5VWlEbThRek1IZFNIcWtlSmpUX3A0TlgyRVplMWRVRTlkVHRHdmJjbi02UlVzbUtlTQ==","email":"senthilk@us.ibm.com"},"registry.redhat.io":{"auth":"NTI5OTY4NjF8dWhjLTFjckt2WFJ4MWQ0RVhCY0wydlh0N1c3RHBqMjpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTNOMk00TjJVeFptWTFNakUwWVRNellUVXhOV0pqTkRZeVpEUTBOMll5TUNKOS5Zb01iRm5KR2tTcUNndE02UlZieFI1ZG5uemFYdktUQlktT2swZk5BOUVuUWROYkpBZWJxWi0wT0dJMlA5c3NQdmtCd1dmUjBOc3k0OHlYTDVaZ3B1cmVIUUNOQlhQQ1VRXzZ4YV95UkI3QWFXY2ROSlNxY0M3bmJNakhJOVpwcUt4WTNEYVp5TXVSR3htcTZ1SUNXX1UzXzNaWTZZajVvY08zZDBZZlhtWEV1bmZ0MXJzanNlUHIxNEdRM19QYXplSzhUakwzSUpYQ2l0UUl6Rl9peGFwYjV2Mjk3dkUwaUZGSVl5a2ltSUp5TlNGdlRXSkVLLWlvS290ZC1pMjBYQ2NNNFFfbFJ6UC1EWHdJSWdDV0ZJYjNwMWNNRDJGVk9xUUlHbF9iS0FleHRxNElaVzJTZ01ISTJBSGxITG1Wa2tRejN2TEZiUGJ6ZlpRZFRTZW56OGRrRFAtVFQ0TmpLWl8xWUtjRlpsa1NSSU8tN2JIdkw5bE5MZ0dEaE1kUnYya3kwUzNCUU44dlhrbE9iWWZoOGpIWVplM29iQUJRRGpFaW5ycFducUd4aGpkVGxfRTFobXpraTVoRkpKVzNxeTU1ZnFjX0ViNlEzMHJwQUFkNkRTV0dVTEV1V1Btb2l5dTZyOGdvMUVWcGZIOHJYS09QaG4zcjVhMG9hcFQ1NjZGVGIzeXRmeGhPZXB1Uk50OGxaUXhvbXZaYWtWVmNFYTZyZF96WnA1OWhuWURxZEJVOVE4S0FnUFBVMmNJaV85NGg1czdycGxhU0piOVhYbUU0LTZWLWxzcUhDSTNFS1BEdzlTNFpCLURyb0xKeXBYUmU0TnMwZ3o5VWlEbThRek1IZFNIcWtlSmpUX3A0TlgyRVplMWRVRTlkVHRHdmJjbi02UlVzbUtlTQ==","email":"senthilk@us.ibm.com"}}}'
+base_domain: "fisc.lab"
+base_domain_prefix: "cp4d2"
+
+# Vmware information 
+
+target_esxi_ip: "10.75.38.60"
+target_esxi_username: "root"
+target_esxi_password: "P@ssw0rd"
+target_esx_datastore: "CP4D_AA_SAN_01"
+target_esx_portgroup: "vmportgroup"
+
+vcenter_iso_name: "VMware-VCSA-all-6.7.0-13010631"
+vcenter_username: "Administrator@vsphere.local"
+vcenter_password: "P@ssw0rd"
+vcenter_ip: "10.75.17.85"
+vcenter_datacenter: "FISC"
+vcenter_cluster: "OCP4DP2"
+
+
+
+#Portable IP information Address IBM Cloud for Gov
+portable:
+  subnet: "10.75.17.64/26"
+  gateway: "10.75.17.65"
+  netmask: "255.255.255.192"
+  prefix: "26"
+  # Hint its the last IP address of portable pool. You can obtain this on portable Ip address page
+  broadcast: "10.75.17.127"
+  # Hint its the first IP address of portable pool. You can obtain this on portable Ip address page
+  network: "10.75.17.64" 
+  # These IP address are default DNS server in IC4G  
+  dns1: "12.127.16.68"
+  dns2: "12.127.16.67"
+  
+# Helper Node which will act as 
+# DNS,Load balancer, WebServer, DHCP, PXE, TFTP, NFSv4 and Basetion Host
+helpernode_IP: "10.75.17.107" 
+
+
+
+# Pool of IP address which can be obtain from portable IP address. 
+# minimum 7 IP address should be assiged from the pool of portable IP address. These address will be used for Master, Worker and BootStrap nodes. 
+
+portable_pool_start_ip: "10.75.17.90"
+portable_pool_end_ip: "10.75.17.125"
+  
+
+# Bootstrap IP address (OCS requirments) should be part of the pool IP address 
+bootstrap_ip: "10.75.17.106"
+
+# Master IP address. By default OCS requires 3 master nodes
+
+master_ip:
+   0: "10.75.17.111"
+   1: "10.75.17.112"
+   2: "10.75.17.113"
+
+
+
+# Worker IP address
+worker_ip:
+   0: "10.75.17.114"
+   1: "10.75.17.115"
+   2: "10.75.17.116"
+   3: "10.75.17.117"
+   4: "10.75.17.122"
+   5: "10.75.17.123"
+   6: "10.75.17.124"
+   7: "10.75.17.102"
+   # 8: "10.75.17.103"
+   # 9: "10.75.17.104"
+
+   
+
+
+# latest openshift build 
+openshift_build: "4.4"
+openshift_version: "17"
+
+
+##################################################################
+# The following are variables that are parameterized for OCP v4.2
+##################################################################
+
+# RHCOS build and url
+v_rhcos_ova: "rhcos-{{openshift_build}}.{{openshift_version}}-x86_64-vmware.x86_64.ova"
+v_rhcos_ova_url: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{openshift_build}}/latest/rhcos-{{openshift_build}}.{{openshift_version}}-x86_64-vmware.x86_64.ova"
+v_rhcos_bios: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{openshift_build}}/latest/rhcos-{{openshift_build}}.{{openshift_version}}-x86_64-metal.x86_64.raw.gz"
+v_rhcos_initramfs: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{openshift_build}}/latest/rhcos-{{openshift_build}}.{{openshift_version}}-x86_64-installer-initramfs.x86_64.img	"
+v_rhcos_install_kernel: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{openshift_build}}/latest/rhcos-{{openshift_build}}.{{openshift_version}}-x86_64-installer-kernel-x86_64"
+
+
+# OCP Installer
+v_ocp_terraform: "https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip"
+v_ocp_client: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{openshift_build}}.{{openshift_version}}/openshift-client-linux-{{openshift_build}}.{{openshift_version}}.tar.gz"
+v_ocp_installer: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{openshift_build}}.{{openshift_version}}/openshift-install-linux-{{openshift_build}}.{{openshift_version}}.tar.gz"
+
+
+
+###############################################################################################################
+#Beyond this point please edit on your own risk
+# The section below in for advance users
+###############################################################################################################
+# you can point to either redhat or centos image
+helpernode_hostname: "helper"
+helper_node_image: "CentOS-7-x86_64-DVD-2009.iso"
+helper_node_image_url: "http://centos.mirror.ndchost.com/7.9.2009/isos/x86_64"
+helper_node_image_uncompressed_name: "{{ CentOS-7-x86_64-DVD-1908.iso }}"
+
+
+# Libvirt image directory
+libvirt_image_directory: "/var/lib/libvirt/images" 
+#KVM network name
+kvm_network_name: "openshift4"
+
+
+
+kvm_vm_hostname: "{{helpernode_hostname}}.{{base_domain_prefix}}.{{base_domain}}"
+kvm_vm_public_ip: "{{ helpernode_IP }}"
+kvm_vm_root_pwd: "passw0rd"
+kvm_vm_base_img: "{{ helper_node_image_uncompressed_name }}"
+kvm_vm_vcpus: "4"
+kvm_vm_ram: "16384"
+kvm_vm_os_disk_name: "{{ kvm_vm_hostname }}"
+kvm_vm_os_disk_size: "150G"
+kvm_vm_nics:
+  - name: ens32
+    bootproto: static
+    onboot: yes
+    ip: "{{ helpernode_IP }}"
+    prefix: "{{ portable.prefix }}"
+    gateway: "{{ portable.gateway }}"
+    dns_server: "{{ portable.dns1 }}"
+    config: "--type network --source {{ kvm_network_name }} --model virtio"
+
+
+
+kvm_timezone: "America/New_York"
+
+disk: vda
+
+helper:
+  name: "{{ helpernode_hostname }}"
+  ipaddr: "{{ helpernode_IP }}"
+  networkifacename: "eth0"
+dns:
+  domain: "{{ base_domain }}"
+  clusterid: "{{base_domain_prefix }}"
+  forwarder1: "{{ portable.dns1 }}"
+  forwarder2: "{{ portable.dns2 }}"
+
+dhcp:
+  router: "{{ portable.gateway }}"
+  bcast: "{{ portable.broadcast }}"
+  netmask: "{{ portable.netmask }}"
+  poolstart: "{{ portable_pool_start_ip }}"
+  poolend: "{{ portable_pool_end_ip }}"
+  ipid: "{{ portable.network }}"
+  netmaskid: "{{ portable.netmask }}"
+
+bootstrap:
+  name: "bootstrap-0"
+  ipaddr: "{{ bootstrap_ip }}"
+  macaddr: "{{ hostvars['localhost']['bootstrap_mac']  }}"
+
+
+masters:
+  - name: "control-plane-0"
+    ipaddr: "{{ master_ip.0 }}"
+    macaddr: "{{ hostvars['localhost']['master_mac_0']  }}"
+  - name: "control-plane-1"
+    ipaddr: "{{ master_ip.1 }}"
+    macaddr: "{{ hostvars['localhost']['master_mac_1']  }}"
+  - name: "control-plane-2"
+    ipaddr: "{{ master_ip.2 }}"
+    macaddr: "{{ hostvars['localhost']['master_mac_2'] }}"
+
+
+workers:
+  - name: "compute-0"
+    ipaddr: "{{ worker_ip.0 }}"
+    macaddr: "{{ hostvars['localhost']['worker_mac_0'] | default('abc')}}"
+  - name: "compute-1"
+    ipaddr: "{{ worker_ip.1 }}"
+    macaddr: "{{ hostvars['localhost']['worker_mac_1']  | default('abc')}}"
+  - name: "compute-2"
+    ipaddr: "{{ worker_ip.2 }}"
+    macaddr: "{{ hostvars['localhost']['worker_mac_2']  | default('abc') }}"
+  - name: "compute-3"
+    ipaddr: "{{ worker_ip.3 }}"
+    macaddr: "{{ hostvars['localhost']['worker_mac_3']  | default('abc') }}"
+  - name: "compute-4"
+    ipaddr: "{{ worker_ip.4 }}"
+    macaddr: "{{ hostvars['localhost']['worker_mac_4']  | default('abc') }}"
+  - name: "compute-5"
+    ipaddr: "{{ worker_ip.5 }}"
+    macaddr: "{{ hostvars['localhost']['worker_mac_5']  | default('abc') }}"
+  - name: "compute-6"
+    ipaddr: "{{ worker_ip.6 }}"
+    macaddr: "{{ hostvars['localhost']['worker_mac_6']  | default('abc') }}"
+  - name: "compute-7"
+    ipaddr: "{{ worker_ip.7 }}"
+    macaddr: "{{ hostvars['localhost']['worker_mac_7']  | default('abc') }}"
+  # - name: "compute-8"
+    # ipaddr: "{{ worker_ip.8 }}"
+    # macaddr: "{{ hostvars['localhost']['worker_mac_8']  | default('abc') }}"
+  # - name: "compute-9"
+    # ipaddr: "{{ worker_ip.9 }}"
+    # macaddr: "{{ hostvars['localhost']['worker_mac_9'] | default('abc') }}"

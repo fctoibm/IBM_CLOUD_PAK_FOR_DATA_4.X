@@ -10,7 +10,7 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - {{sl_ocp_registry_storage_worker.0}}.{{ base_domain_prefix }}.{{ base_domain }} 
+          - {{sl_ocp_registry_storage_worker.0}} 
   storageClassDevices:
     - storageClassName: "local-sc"
       volumeMode: Filesystem

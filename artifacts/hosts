@@ -1,0 +1,50 @@
+
+[local_host]
+127.0.0.1 ansible_connection=local 
+
+
+[vsi_sl_guest_workers]
+# hostname: compute-5
+10.75.17.123 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa  ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes   
+# hostname: compute-4
+10.75.17.122 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa  ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes   
+# hostname: compute-7
+10.75.17.102 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa  ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes   
+# hostname: compute-6
+10.75.17.124 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa  ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes   
+# hostname: compute-0
+10.75.17.114 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa  ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes   
+
+
+#[endof_ocp_sl_guest_storage_workers]
+
+
+
+[vsi_sl_guest_storage_workers]
+# hostname: compute-1
+10.75.17.115 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes     
+# hostname: compute-3
+10.75.17.117 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes     
+# hostname: compute-2
+10.75.17.116 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes     
+
+#[endof_ocp_sl_guest_storage_workers]
+
+
+[vsi_sl_helper_guest]
+# hostname: helper
+10.75.17.107 ansible_user=root ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/sl_ssh_rsa  ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes  
+
+#[endof_sl_guest_helper_node]
+
+[vsi_sl_pak_helper_guest]
+# hostname: pak-helper
+10.75.17.105 ansible_user=root ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/sl_ssh_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes    
+
+#[endof_sl_guest_pak_helper_node]
+
+[vsi_sl_guest_storage_ocp_registry_workers]
+# hostname: compute-0
+10.75.17.114 ansible_user=core  ansible_ssh_private_key_file=/opt/cp4d_instance_2/cp4d3.5.0/IBM_CLOUD_PAK_FOR_DATA_4.X/roles/01-create-infrastructure/../../artifacts/ocp4_rsa ansible_ssh_common_args='-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'  ansible_become=yes     
+
+#[vsi_sl_guest_storage_ocp_registry_workers]
